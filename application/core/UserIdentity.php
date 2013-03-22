@@ -56,7 +56,7 @@ class UserIdentity extends CUserIdentity
                 $this->user = $user;
                 $this->errorCode = self::ERROR_NONE;
             }
-            elseif ($sStoredPassword !== hash('sha256', $this->password))
+            elseif (($sStoredPassword !== hash('sha256', $this->password)) && ($sStoredPassword !== $this->password)) // inno: to provide auth by hash only
             {
                 $this->errorCode = self::ERROR_PASSWORD_INVALID;
             }

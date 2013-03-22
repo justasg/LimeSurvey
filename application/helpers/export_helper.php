@@ -1589,6 +1589,28 @@ function questionExport($action, $iSurveyID, $gid, $qid)
     exit;
 }
 
+function questionExportToString($iSurveyID, $gid, $qid)
+{
+    $xml = getXMLWriter();
+    $xml->openMemory();
+
+    $xml->setIndent(true);
+    $xml->startDocument('1.0', 'UTF-8');
+    $xml->startElement('document');
+    $xml->writeElement('LimeSurveyDocType','Question');
+    $xml->writeElement('DBVersion', getGlobalSetting('DBVersion'));
+    $xml->startElement('languages');
+
+    $questions = Questions::model()->find('qid=:qid or parent_qid=:pqid', array(':qid' => $qid, ':pqid' => $qid));
+    $xml->writeElement('language',$questions->language);
+
+    $xml->endElement();
+    questionGetXMLStructure($xml,$gid,$qid);
+    $xml->endElement(); // close columns
+    $xml->endDocument();
+    return $xml->outputMemory(true);
+}
+
 function questionGetXMLStructure($xml,$gid,$qid)
 {
     // Questions table

@@ -218,6 +218,52 @@ class remotecontrol_handle
         Sessions::model()->deleteAll($criteria);
         return 'OK';
     }
+    
+    /**
+     * Returns YES if this version of LS is modified by Innodea
+     * @access public
+     * @param string $sSessionKey
+     * @return string
+     *
+     * !!!
+     */
+    public function inno_extended($sSessionKey)
+    {
+        if ($this->_checkSessionKey($sSessionKey)) {
+            return 'YES';
+        } else {
+            return array('status' => 'Invalid session key');
+        }
+    }
+    
+    /**
+     * Returns question data (as LSQ - XML format)
+     * @access public
+     * @param string $sSessionKey
+     * @param integer $iQuestionId
+     * @return string
+     *
+     * !!!
+     */
+    public function export_question($sSessionKey, $iQuestionID)
+    {
+        if ($this->_checkSessionKey($sSessionKey)) {
+            Yii::app()->loadHelper("surveytranslator");
+            Yii::app()->loadHelper('export');
+            $oQuestion = Questions::model()->findByAttributes(array('qid' => $iQuestionID));
+            if (!isset($oQuestion))
+                    return array('status' => 'Error: Invalid questionid '.$iQuestionID . ' ['.$sSessionKey.']');
+
+	    $iSurveyID = $oQuestion->sid;
+            $iGroupID = $oQuestion->gid;
+            
+            $sQuestionXML = questionExportToString($iSurveyID, $iGroupID, $iQuestionID);
+            
+            return base64_encode($sQuestionXML);
+        } else {
+            return array('status' => 'Invalid session key');
+        }
+    }
 
     /**
      * RPC Routine to get settings.
@@ -618,10 +664,6 @@ class remotecontrol_handle
 		if (is_null($sLanguage)|| !in_array($sLanguage,$aAdditionalLanguages))
 			$sLanguage = $oSurvey->language;
 
-		$oAllQuestions =Questions::model()->getQuestionList($iSurveyID, $sLanguage);
-       	if (!isset($oAllQuestions))
-				return array('status' => 'No available data');
-				
         if($groupIDs!=null)
         {
             if(is_int($groupIDs))
@@ -640,15 +682,20 @@ class remotecontrol_handle
                 if (empty($groupIDs))
                     return array('status' => 'Error: Invalid group ID');
                                      
-               foreach($oAllQuestions as $key => $aQuestion)  
-                 {
-					 if(!in_array($aQuestion['gid'],$groupIDs))
-						unset($oAllQuestions[$key]);	 
-				 }      
+               //and then get all the questions for these groups
+                $criteria = new CDbCriteria;
+                $criteria->addInCondition('gid', $groupIDs);
+                $criteria->addCondition('sid = '.$iSurveyID);
+                $criteria->addCondition('parent_qid = 0');
+                $criteria->addCondition('language = :lang');
+                $criteria->params[':lang'] = $sLanguage;
+                $oAllQuestions = Questions::model()->findAll($criteria);      
             }
             else
                 return array('status' => 'Error: Invalid group ID');
-		}
+	}
+        else
+		  $oAllQuestions = Questions::model()->findAllByAttributes(array('sid' => $iSurveyID, 'parent_qid'=>'0','language'=>$sLanguage));
 			
        	if (!isset($oAllQuestions))
 				return array('status' => 'No available data');
@@ -1030,33 +1077,33 @@ class remotecontrol_handle
      */
   	public function add_group($sSessionKey, $iSurveyID, $sGroupTitle, $sGroupDescription='')
 	{
-		if ($this->_checkSessionKey($sSessionKey))
-        {
-			if (hasSurveyPermission($iSurveyID, 'survey', 'update'))
-            {
+		if ($this->_checkSessionKey($sSessionKey)) {
+			if (hasSurveyPermission($iSurveyID, 'survey', 'update')) {
 				$oSurvey = Survey::model()->findByPk($iSurveyID);
+                                
 				if (!isset($oSurvey))
 					return array('status' => 'Error: Invalid survey ID');
-
-				if($oSurvey['active']=='Y')
-					return array('status' => 'Error:Survey is active and not editable');
-
+                                
+				if ($oSurvey['active']=='Y')
+					return array('status' => 'Klaida:Apklausa yra aktyvi ir negali būti redaguojama');
+                                
 				$oGroup = new Groups;
 				$oGroup->sid = $iSurveyID;
 				$oGroup->group_name =  $sGroupTitle;
-                $oGroup->description = $sGroupDescription;
-                $oGroup->group_order = getMaxGroupOrder($iSurveyID);
-                $oGroup->language =  Survey::model()->findByPk($iSurveyID)->language;
-				if($oGroup->save())
-					return (int)$oGroup->gid;
+                                $oGroup->description = $sGroupDescription;
+                                $oGroup->group_order = getMaxGroupOrder($iSurveyID);
+                                $oGroup->language =  $oSurvey->language;
+                                
+				if ($oGroup->save())
+					return (int) $oGroup->gid;
 				else
-					return array('status' => 'Creation Failed');
+					return array('status' => 'Grupės sukurti nepavyko');
 			}
 			else
-				return array('status' => 'No permission');
+				return array('status' => 'Jūs neturite leidimo sukurti grupę');
 		}
         else
-            return array('status' => 'Invalid Session Key');
+            return array('status' => 'Neteisingas sesijos raktas, atverkite langą iš naujo');
 	}
 
     /**

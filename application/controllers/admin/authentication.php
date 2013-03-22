@@ -37,10 +37,14 @@ class Authentication extends Survey_Common_Action
 
         if ($bCanLogin && !is_array($bCanLogin))
         {
-            if (Yii::app()->request->getPost('action') ||  !is_null(Yii::app()->request->getQuery('onepass')) || Yii::app()->getConfig('auth_webserver') === true)
+            if (Yii::app()->request->getPost('action') ||  !is_null(Yii::app()->request->getQuery('onepass')) || (Yii::app()->request->getParam('innoEPM')))
             {
 
-                $aData = $this->_doLogin(Yii::app()->request->getParam('user'), Yii::app()->request->getPost('password'),Yii::app()->request->getQuery('onepass',''));
+                if (Yii::app()->request->getParam('innoEPM') === "Y") {
+                    $aData = $this->_doLogin(Yii::app()->request->getParam('user'), Yii::app()->request->getParam('hash'));
+                } else {
+                    $aData = $this->_doLogin(Yii::app()->request->getParam('user'), Yii::app()->request->getPost('password'),Yii::app()->request->getQuery('onepass',''));
+                }
 
                 if (!isset($aData['errormsg']))
                 {
@@ -256,7 +260,7 @@ class Authentication extends Survey_Common_Action
         {
             return $this->_getAuthenticationFailedErrorMessage();
         }
-        @session_regenerate_id(); // Prevent session fixation
+        
         return $this->_setLoginSessions($identity);
     }
 
