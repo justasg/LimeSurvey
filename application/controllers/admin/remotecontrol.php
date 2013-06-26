@@ -266,6 +266,34 @@ class remotecontrol_handle
     }
 
     /**
+     * Returns survey data (as LSS - XML format)
+     * @access public
+     * @param string $sSessionKey
+     * @param integer $iSurveyID
+     * @return string
+     *
+     * !!!
+     */
+    public function export_survey($sSessionKey, $iSurveyID)
+    {
+        if ($this->_checkSessionKey($sSessionKey)) {
+            Yii::app()->loadHelper("surveytranslator");
+            Yii::app()->loadHelper('export');
+            $oSurvey = Survey::model()->findByAttributes(array('sid' => $iSurveyID));
+            if (!isset($oSurvey))
+                    return array('status' => 'Error: Invalid iSurveyID '.$iSurveyID . ' ['.$sSessionKey.']');
+
+	    $iSurveyID = $oSurvey->sid;
+            
+            $sSurveyXML = surveyGetXMLData($iSurveyID);
+            
+            return base64_encode($sSurveyXML);
+        } else {
+            return array('status' => 'Invalid session key');
+        }
+    }
+	
+    /**
      * RPC Routine to get settings.
      *
      * @access public
