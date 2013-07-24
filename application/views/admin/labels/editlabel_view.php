@@ -1,6 +1,6 @@
 <div class='header'>
     <input type='image' src='<?php echo $sImageURL; ?>close.png' style='float:right;'
-        onclick="window.open('<?php echo $this->createUrl("admin/labels/sa/view/lid/".$lid); ?>', '_top')" alt='<?php $clang->eT("Close"); ?>'/>
+        onclick="window.location='<?php echo $this->createUrl("admin/labels/sa/view/lid/".$lid); ?>'" alt='<?php $clang->eT("Close"); ?>'/>
     <?php if ($action == "newlabelset") { $clang->eT("Create or import new label set(s)");}
         else {$clang->eT("Edit label set"); } ?>
 </div>

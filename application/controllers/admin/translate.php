@@ -379,7 +379,7 @@ class translate extends Survey_Common_Action {
 							array(
 								'id' => 'translationlanguage',
 								'name' => 'translationlanguage',
-								'onchange' => "window.open(this.options[this.selectedIndex].value,'_top')"
+								'onchange' => "window.location=this.options[this.selectedIndex].value"
 							)
 						);
 
@@ -998,7 +998,7 @@ class translate extends Survey_Common_Action {
 
 		$img_tag = CHtml::image($imageurl . "/" . $menuImageFile, $jsMenuText, array('name'=>$menuImageText));
 		$menuitem = CHtml::link($img_tag, '#', array(
-			'onclick' => "window.open('{$scriptname}', '_top')"
+			'onclick' => "window.location='{$scriptname}'"
 		));
         return $menuitem;
     }

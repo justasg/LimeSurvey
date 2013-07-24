@@ -1498,8 +1498,8 @@ class dataentry extends Survey_Common_Action
             $allrecords_link = $this->getController()->createUrl('/admin/responses/sa/index/surveyid/'.$surveyid);
             $aDataentryoutput .= "<div class='messagebox ui-corner-all'><div class='successheader'>".$clang->gT("Success")."</div>\n"
             .$clang->gT("Record has been updated.")."<br /><br />\n"
-            ."<input type='submit' value='".$clang->gT("View This Record")."' onclick=\"window.open('$onerecord_link', '_top')\" /><br /><br />\n"
-            ."<input type='submit' value='".$clang->gT("Browse responses")."' onclick=\"window.open('$allrecords_link', '_top')\" />\n"
+            ."<input type='submit' value='".$clang->gT("View This Record")."' onclick=\"window.location='$onerecord_link'\" /><br /><br />\n"
+            ."<input type='submit' value='".$clang->gT("Browse responses")."' onclick=\"window.location='$allrecords_link'\" />\n"
             ."</div>\n";
 
             $aViewUrls['output'] = $aDataentryoutput;

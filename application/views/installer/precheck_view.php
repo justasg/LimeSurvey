@@ -147,11 +147,11 @@ function dirReport($dir, $write, $clang)
 <table style="font-size:11px; width: 694px;">
 <tbody>
 <tr>
-<td align="left" style="width: 227px;"><input class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="button" value="<?php $clang->eT('Previous'); ?>" onclick="javascript: window.open('<?php echo $this->createUrl("installer/license"); ?>', '_top')" /></td>
-<td align="center" style="width: 227px;"><input class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="button" value="<?php $clang->eT('Check again'); ?>" onclick="javascript: window.open('<?php echo $this->createUrl("installer/precheck"); ?>', '_top')" /></td>
+<td align="left" style="width: 227px;"><input class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="button" value="<?php $clang->eT('Previous'); ?>" onclick="javascript: window.location='<?php echo $this->createUrl("installer/license"); ?>'" /></td>
+<td align="center" style="width: 227px;"><input class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="button" value="<?php $clang->eT('Check again'); ?>" onclick="javascript: window.location='<?php echo $this->createUrl("installer/precheck"); ?>'" /></td>
 <td align="right" style="width: 227px;">
 <?php if (isset($next) && $next== TRUE) { ?>
-<input class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="button" value="<?php $clang->eT('Next'); ?>" onclick="javascript: window.open('<?php echo $this->createUrl("installer/database"); ?>', '_top')" />
+<input class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="button" value="<?php $clang->eT('Next'); ?>" onclick="javascript: window.location='<?php echo $this->createUrl("installer/database"); ?>'" />
 <?php } ?>
 
 </td>

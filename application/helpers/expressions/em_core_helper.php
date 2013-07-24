@@ -1580,7 +1580,7 @@ class ExpressionManager {
                         if ($this->hyperlinkSyntaxHighlighting && isset($gid) && isset($qid)) {
                             // Modify this link to utilize a different framework
                             $editlink = Yii::app()->getController()->createUrl('admin/survey/sa/view/surveyid/' . $this->sid . '/gid/' . $gid . '/qid/' . $qid);
-                            $stringParts[] = " onclick='window.open(\"" . $editlink . "\");'";
+                            $stringParts[] = " onclick='window.location=\"" . $editlink . "\";'";
                         }
                         $stringParts[] = ">";
                         if ($this->sgqaNaming)

@@ -8,7 +8,7 @@
         <font color='red'><strong><?php $clang->eT("Error"); ?></strong></font>
         <?php $clang->eT("You have not selected a survey to delete"); ?>
         <br /><br />
-        <input type='submit' value='<?php $clang->eT("Main Admin Screen"); ?>' onclick="window.open('<?php echo $this->createUrl('admin/index'); ?>', '_top')"/>
+        <input type='submit' value='<?php $clang->eT("Main Admin Screen"); ?>' onclick="window.location='<?php echo $this->createUrl('admin/index'); ?>'"/>
         </td></tr></table>
         </body></html>
         <?php return;
@@ -32,7 +32,7 @@
         <?php } ?>
 
         <p>
-        <input type='submit' value='<?php $clang->eT("Delete survey"); ?>' onclick="window.open('<?php echo $this->createUrl("admin/survey/sa/delete/surveyid/$surveyid/delete/yes"); ?>', '_top')" />
-        <input type='submit' value='<?php $clang->eT("Cancel"); ?>' onclick="window.open('<?php echo $this->createUrl("admin/survey/sa/view/$surveyid"); ?>', '_top')" />
+        <input type='submit' value='<?php $clang->eT("Delete survey"); ?>' onclick="window.location='<?php echo $this->createUrl("admin/survey/sa/delete/surveyid/$surveyid/delete/yes"); ?>'" />
+        <input type='submit' value='<?php $clang->eT("Cancel"); ?>' onclick="window.location='<?php echo $this->createUrl("admin/survey/sa/view/$surveyid"); ?>'" />
     <?php } ?>
 </div><br />&nbsp;

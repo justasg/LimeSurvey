@@ -19,7 +19,7 @@
         </div><div class='menubar-right'>
             <img width="11" alt="" src="<?php echo $sImageURL;?>blank.gif"/>
             <label for='questionNav'><?php $clang->eT("Questions");?>:</label>
-            <select id='questionNav' onchange="window.open(this.options[this.selectedIndex].value,'_top')"><?php echo $quesitonNavOptions;?></select>
+            <select id='questionNav' onchange="window.location=this.options[this.selectedIndex].value"><?php echo $quesitonNavOptions;?></select>
             <img alt="" src="<?php echo $sImageURL;?>separator.gif"/>
             <a href="http://docs.limesurvey.org" target='_blank'>
                 <img src='<?php echo $sImageURL;?>showhelp.png' title='' alt='<?php $clang->eT("LimeSurvey online manual");?>' /></a>

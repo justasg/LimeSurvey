@@ -32,6 +32,6 @@ if (!$downloaderror)
     $clang->eT('As a last step you should clear your browser cache now.');?> <br /> <?php
 }
 
-echo "<p><button onclick=\"window.open('".Yii::app()->getController()->createUrl("admin/globalsettings")."', '_top')\" >".$clang->gT('Back to main menu'); ?>
+echo "<p><button onclick=\"window.location='".Yii::app()->getController()->createUrl("admin/globalsettings")."'\" >".$clang->gT('Back to main menu'); ?>
 </button></p>
 </div>

@@ -41,13 +41,13 @@ else
     if ($error)
     {
         echo '<br /><br />'.$clang->gT('When checking your installation we found one or more problems. Please check for any error messages above and fix these before you can proceed.');
-        echo "<p><button onclick=\"window.open('".Yii::app()->getController()->createUrl("admin/update/sa/index/")."', '_top')\"";
+        echo "<p><button onclick=\"window.location='".Yii::app()->getController()->createUrl("admin/update/sa/index/")."'\"";
         echo ">".$clang->gT('Check again')."</button></p>";
     }
     else
     {
         echo '<br /><br />'.$clang->gT('Everything looks alright. Please proceed to the next step.');
-        echo "<p><button onclick=\"window.open('".Yii::app()->getController()->createUrl("admin/update/sa/step2/")."', '_top')\"";
+        echo "<p><button onclick=\"window.location='".Yii::app()->getController()->createUrl("admin/update/sa/step2/")."'\"";
         if ($updatekey==''){    echo "disabled='disabled'"; }
         echo ">".sprintf($clang->gT('Proceed to step %s'),'2')."</button></p>";
     }

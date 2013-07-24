@@ -2600,7 +2600,7 @@ function CSVImportSurvey($sFullFilepath,$iDesiredSurveyId=NULL,$bTranslateLinks=
             $importsurvey .= "<br /><div class='warningheader'>".$clang->gT("Error")."</div><br />\n";
             $importsurvey .= $clang->gT("Import of this survey file failed")."<br />\n";
             $importsurvey .= $clang->gT("File does not contain LimeSurvey data in the correct format.")."<br /><br />\n"; //Couldn't find the SID - cannot continue
-            $importsurvey .= "<input type='submit' value='".$clang->gT("Main Admin Screen")."' onclick=\"window.open('$scriptname', '_top')\" />\n";
+            $importsurvey .= "<input type='submit' value='".$clang->gT("Main Admin Screen")."' onclick=\"window.location='$scriptname'\" />\n";
             $importsurvey .= "</div>\n";
             unlink($sFullFilepath); //Delete the uploaded file
             return;

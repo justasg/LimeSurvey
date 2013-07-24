@@ -46,7 +46,7 @@ $(document).ready(function() {
             switch(act)
             {
                 case 'edit' :
-                    window.open(attributeEditUrl + '/' + rid, '_top');
+                    window.location=attributeEditUrl + '/' + rid;
                     break;
                 case 'del':
                     $('#'+gid).jqGrid('delGridRow', rid, delOptions);

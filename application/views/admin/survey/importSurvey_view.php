@@ -4,8 +4,8 @@
         if ($bFailed){ ?>
         <div class='errorheader'><?php $clang->eT("Error");?></div>
         <?php echo $sErrorMessage; ?><br /><br />
-		<input type='submit' value='<?php $clang->eT("Main Admin Screen");?>' onclick="window.open('<?php echo $this->createUrl('/admin');?>', '_top')"> 
-        <input type='submit' value='<?php $clang->eT("Import again");?>' onclick="window.open('<?php echo $this->createUrl('admin/survey/sa/newsurvey#import');?>', '_top')"><br /><br /></div>
+		<input type='submit' value='<?php $clang->eT("Main Admin Screen");?>' onclick="window.location='<?php echo $this->createUrl('/admin');?>'"> 
+        <input type='submit' value='<?php $clang->eT("Import again");?>' onclick="window.location='<?php echo $this->createUrl('admin/survey/sa/newsurvey#import');?>'"><br /><br /></div>
     <?php } else
     {?>
     <div class='successheader'><?php $clang->eT("Success");?></div>&nbsp;<br />
@@ -23,7 +23,7 @@
 	        	echo $aImportResults['error'];
         	} 
     		?><br /><br />
-        <input type='submit' value='<?php $clang->eT("Main Admin Screen");?>' onclick="window.open('<?php echo $this->createUrl('/admin');?>', '_top')" />
+        <input type='submit' value='<?php $clang->eT("Main Admin Screen");?>' onclick="window.location='<?php echo $this->createUrl('/admin');?>'" />
         <?php } else
         {?>
 
@@ -92,7 +92,7 @@
             <strong><?php $clang->eT("Copy of survey is completed.");?></strong><br />
             <?php } ?>
 			<br>
-        <input type='submit' value='<?php $clang->eT("Go to survey");?>' onclick="window.open('<?php echo $sLink; ?>', '_top')"><br /><br />
+        <input type='submit' value='<?php $clang->eT("Go to survey");?>' onclick="window.location='<?php echo $sLink; ?>'"><br /><br />
         <?php } ?>
     </div><br />
     <?php }?>

@@ -4865,7 +4865,7 @@ function languageDropdown($surveyid,$selected)
     $slangs = Survey::model()->findByPk($surveyid)->additionalLanguages;
     $baselang = Survey::model()->findByPk($surveyid)->language;
     array_unshift($slangs,$baselang);
-    $html = "<select class='listboxquestions' name='langselect' onchange=\"window.open(this.options[this.selectedIndex].value, '_top')\">\n";
+    $html = "<select class='listboxquestions' name='langselect' onchange=\"window.location=this.options[this.selectedIndex].value\">\n";
 
     foreach ($slangs as $lang)
     {

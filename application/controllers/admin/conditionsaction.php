@@ -124,7 +124,7 @@ class conditionsaction extends Survey_Common_Action {
         {
             $conditionsoutput = $clang->gT("You have not selected a survey").str_repeat($br, 2);
             $conditionsoutput .= CHtml::submitButton($clang->gT("Main admin screen"), array(
-            'onclick' => "window.open('".$this->getController()->createUrl("admin/")."', '_top')"
+            'onclick' => "window.location='".$this->getController()->createUrl("admin/")."'"
             )).$br;
             safeDie($conditionsoutput);
             return;
@@ -145,10 +145,10 @@ class conditionsaction extends Survey_Common_Action {
             if (!isset($_GET['ok']))
             {
                 $button_yes = CHtml::submitButton($clang->gT("Yes"), array(
-                'onclick' => "window.open('".$this->getController()->createUrl("admin/conditions/sa/index/subaction/resetsurveylogic/surveyid/$iSurveyID")."?ok=Y"."', '_top')"
+                'onclick' => "window.location='".$this->getController()->createUrl("admin/conditions/sa/index/subaction/resetsurveylogic/surveyid/$iSurveyID")."?ok=Y"."'"
                 ));
                 $button_cancel = CHtml::submitButton($clang->gT("Cancel"), array(
-                'onclick' => "window.open('".$this->getController()->createUrl("admin/survey/sa/view/surveyid/$iSurveyID")."', '_top')"
+                'onclick' => "window.location='".$this->getController()->createUrl("admin/survey/sa/view/surveyid/$iSurveyID")."'"
                 ));
 
                 $messagebox_content = $clang->gT("You are about to delete all conditions on this survey's questions")."($iSurveyID)"
@@ -179,7 +179,7 @@ class conditionsaction extends Survey_Common_Action {
         {
             $conditionsoutput = $clang->gT("You have not selected a question").str_repeat($br, 2);
             $conditionsoutput .= CHtml::submitButton($clang->gT("Main admin screen"), array(
-            'onclick' => "window.open('".$this->getController()->createUrl("admin/")."', '_top')"
+            'onclick' => "window.location='".$this->getController()->createUrl("admin/")."'"
             )).$br;
             safeDie($conditionsoutput);
             return;

@@ -92,7 +92,7 @@ if ($thissurvey['active'] == "Y")
                 <td colspan='3' align='center'>";
                 <font color='red'><strong><?php $clang->eT("Error"); ?></strong></font><br />
                 <?php $clang->eT("The survey you selected does not exist"); ?><br /><br />
-                <input type='submit' value='<?php $clang->eT("Main Admin Screen"); ?>' onclick="window.open('<?php echo $scriptname; ?>', '_top')" />
+                <input type='submit' value='<?php $clang->eT("Main Admin Screen"); ?>' onclick="window.location='<?php echo $scriptname; ?>'" />
                 </td>
                 </tr>
                 </table>

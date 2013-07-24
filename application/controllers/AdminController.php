@@ -87,7 +87,7 @@ class AdminController extends LSYii_Controller
             $title = $clang->gT('Main Admin Screen');
             $url = $this->createUrl('/admin');
         }
-        $output .= '<input type="submit" value="'.$title.'" onclick=\'window.open("'.$url.'", "_top")\' /><br /><br />'."\n";
+        $output .= '<input type="submit" value="'.$title.'" onclick=\'window.location="'.$url.'"\' /><br /><br />'."\n";
         $output .= '</div>'."\n";
         $output .= '</div>'."\n";
         echo $output;

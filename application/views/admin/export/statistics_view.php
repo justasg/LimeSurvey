@@ -137,7 +137,7 @@
         </div>
         <p>
             <input type='submit' value='<?php $clang->eT("View statistics"); ?>' />
-            <input type='button' value='<?php $clang->eT("Clear"); ?>' onclick="window.open('<?php echo Yii::app()->getController()->createUrl("admin/statistics/sa/surveyid/$surveyid"); ?>', '_top')" />
+            <input type='button' value='<?php $clang->eT("Clear"); ?>' onclick="window.location='<?php echo Yii::app()->getController()->createUrl("admin/statistics/sa/surveyid/$surveyid"); ?>'" />
         </p>
     </div>
     <div style='clear: both'></div>
@@ -1237,7 +1237,7 @@
 
     <p id='vertical_slide2'>
     <input type='submit' value='<?php $clang->eT("View statistics"); ?>' />
-    <input type='button' value='<?php $clang->eT("Clear"); ?>' onclick="window.open('<?php echo Yii::app()->getController()->createUrl("admin/statistics/sa/index/surveyid/$surveyid"); ?>', '_top')" />
+    <input type='button' value='<?php $clang->eT("Clear"); ?>' onclick="window.location='<?php echo Yii::app()->getController()->createUrl("admin/statistics/sa/index/surveyid/$surveyid"); ?>'" />
     <input type='hidden' name='sid' value='<?php echo $surveyid; ?>' />
     <input type='hidden' name='display' value='stats' />
     </p>

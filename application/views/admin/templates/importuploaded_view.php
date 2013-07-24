@@ -102,5 +102,5 @@
         <?php
         }
     ?>
-    <input type='submit' value='<?php $clang->eT("Open imported template") ?>' onclick="window.open('<?php echo $this->createUrl('admin/templates/view/editfile/startpage.pstpl/screenname/welcome/templatename/' . $newdir) ?>', '_top')" />
+    <input type='submit' value='<?php $clang->eT("Open imported template") ?>' onclick="window.location='<?php echo $this->createUrl('admin/templates/view/editfile/startpage.pstpl/screenname/welcome/templatename/' . $newdir) ?>'" />
 </div>

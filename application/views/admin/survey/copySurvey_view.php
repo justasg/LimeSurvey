@@ -5,7 +5,7 @@
         { ?>
             <div class='warningheader'><?php $clang->eT("Error"); ?></div><br />
              <?php echo $aImportResults['error']; ?><br /><br />
-            <input type='submit' value='<?php $clang->eT("Main Admin Screen"); ?>' onclick="window.open('<?php echo $this->createUrl('admin'); ?>', '_top')" />
+            <input type='submit' value='<?php $clang->eT("Main Admin Screen"); ?>' onclick="window.location='<?php echo $this->createUrl('admin'); ?>'" />
             <?php $importerror = true;
         }
         

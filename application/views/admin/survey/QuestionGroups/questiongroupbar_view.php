@@ -37,7 +37,7 @@
                     if (is_null($condarray))
                     { ?>
 
-                    <a href='#' onclick="if (confirm('<?php $clang->eT("Deleting this group will also delete any questions and answers it contains. Are you sure you want to continue?","js"); ?>')) { window.open('<?php echo $this->createUrl("admin/questiongroup/sa/delete/surveyid/$surveyid/gid/$gid"); ?>','_top'); }">
+                    <a href='#' onclick="if (confirm('<?php $clang->eT("Deleting this group will also delete any questions and answers it contains. Are you sure you want to continue?","js"); ?>')) { window.location='<?php echo $this->createUrl("admin/questiongroup/sa/delete/surveyid/$surveyid/gid/$gid"); ?>'; }">
                         <img src='<?php echo $imageurl; ?>delete.png' alt='<?php $clang->eT("Delete current question group"); ?>' title='' width="<?php echo $iIconSize;?>" height="<?php echo $iIconSize;?>"/></a>
 
                     <?php }
@@ -63,7 +63,7 @@
     </div>
     <div class='menubar-right'>
         <label for="questionid"><?php $clang->eT("Questions:"); ?></label> <select class="listboxquestions" name='questionid' id='questionid'
-            onchange="window.open(this.options[this.selectedIndex].value, '_top')">
+            onchange="window.location=this.options[this.selectedIndex].value">
 
             <?php echo getQuestions($surveyid,$gid,$qid); ?>
         </select>
@@ -115,7 +115,7 @@
         <input id='MinimizeGroupWindow' type='image' src='<?php echo $imageurl; ?>minimize.png' title='<?php $clang->eT("Hide details of this group"); ?>' alt='<?php $clang->eT("Hide details of this group"); ?>' />
         <input type='image' id='MaximizeGroupWindow' src='<?php echo $imageurl; ?>maximize.png' title='<?php $clang->eT("Show details of this group"); ?>' alt='<?php $clang->eT("Show details of this group"); ?>' />
         <input type='image' src='<?php echo $imageurl; ?>close.png' title='<?php $clang->eT("Close this group"); ?>' alt='<?php $clang->eT("Close this group"); ?>'
-            onclick="window.open('<?php echo $this->createUrl("admin/survey/sa/view/surveyid/".$surveyid); ?>','_top');"
+            onclick="window.location='<?php echo $this->createUrl("admin/survey/sa/view/surveyid/".$surveyid); ?>';"
             <?php if (!$qid){?>
                 style='visibility:hidden;'
                 <?php } ?>

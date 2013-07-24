@@ -92,7 +92,7 @@ echo CHtml::activeDropDownList($model, 'surveylang', $languages, array('style' =
  <table style="font-size:11px; width: 694px; background: #ffffff;">
   <tbody>
    <tr>
-    <td align="left" style="width: 227px;"><input class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="button" value="<?php $clang->eT("Previous"); ?>" onclick="javascript: window.open('<?php echo $this->createUrl("installer/welcome"); ?>', '_top')" /></td>
+    <td align="left" style="width: 227px;"><input class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="button" value="<?php $clang->eT("Previous"); ?>" onclick="javascript: window.location='<?php echo $this->createUrl("installer/welcome"); ?>'" /></td>
     <td align="center" style="width: 227px;"></td>
     <td align="right" style="width: 227px;"><?php echo CHtml::submitButton($clang->gT("Next"), array('class' => 'ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only')); ?></td>
    </tr>

@@ -19,13 +19,13 @@
     <div id='templateleft' style="float:left;padding-left:1em;width:12%;">
         <div >
             <?php $clang->eT("Standard files:"); ?><br>
-            <select size='6' name='editfile' onchange="javascript: window.open('<?php echo $this->createUrl("admin/templates/sa/fileredirect/templatename/".$templatename."/screenname/".urlencode($screenname)); ?>/editfile/'+escape(this.value), '_top')">
+            <select size='6' name='editfile' onchange="javascript: window.location='<?php echo $this->createUrl("admin/templates/sa/fileredirect/templatename/".$templatename."/screenname/".urlencode($screenname)); ?>/editfile/'+escape(this.value)">
                 <?php echo makeoptions($files, "name", "name", $editfile); ?>
             </select>
         </div>
         <div style='margin-top:1em;'>
             <?php $clang->eT("CSS & Javascript files:"); ?>
-            <br/><select size='8' name='cssfiles' onchange="javascript: window.open('<?php echo $this->createUrl("admin/templates/sa/fileredirect/templatename/".$templatename."/screenname/".urlencode($screenname)); ?>/editfile/'+escape(this.value), '_top')">
+            <br/><select size='8' name='cssfiles' onchange="javascript: window.location='<?php echo $this->createUrl("admin/templates/sa/fileredirect/templatename/".$templatename."/screenname/".urlencode($screenname)); ?>/editfile/'+escape(this.value)">
                 <?php echo makeoptions($cssfiles, "name", "name", $editfile); ?>
             </select>
         </div>

@@ -24,7 +24,7 @@ if (!isset($updateinfo['files']))
         <div class='warningheader'>".$clang->gT('Update server busy')."</div>
         <p>".$clang->gT('The update server is currently busy. This usually happens when the update files for a new version are being prepared.')."<br /><br />
            ".$clang->gT('Please be patient and try again in about 10 minutes.')."</p></div>
-        <p><button onclick=\"window.open('".Yii::app()->getController()->createUrl("admin/globalsettings")."', '_top')\">".sprintf($clang->gT('Back to global settings'),'4')."</button></p>";
+        <p><button onclick=\"window.location='".Yii::app()->getController()->createUrl("admin/globalsettings")."'\">".sprintf($clang->gT('Back to global settings'),'4')."</button></p>";
 }
 else
 {
@@ -76,13 +76,13 @@ else
     if (count($readonlyfiles)>0)
     {
         echo '<br />'.$clang->gT('When checking your file permissions we found one or more problems. Please check for any error messages above and fix these before you can proceed.');
-        echo "<p><button onclick=\"window.open('".Yii::app()->getController()->createUrl("admin/update/sa/step2/")."', '_top')\"";
+        echo "<p><button onclick=\"window.location='".Yii::app()->getController()->createUrl("admin/update/sa/step2/")."'\"";
         echo ">".$clang->gT('Check again')."</button></p>";
     }
     else
     {
         $clang->eT('Please check any problems above and then proceed to the next step.').'<br />';
-        echo "<p><button onclick=\"window.open('".Yii::app()->getController()->createUrl("admin/update/sa/step3/")."', '_top')\" ";
+        echo "<p><button onclick=\"window.location='".Yii::app()->getController()->createUrl("admin/update/sa/step3/")."'\" ";
         echo ">".sprintf($clang->gT('Proceed to step %s'),'3')."</button></p>";
 
     }

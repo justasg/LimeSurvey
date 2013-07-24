@@ -76,18 +76,18 @@
 
 		<?php echo $errormsg; ?>
 
-		<input type='submit' value='<?php $clang->eT("Add another record"); ?>' onclick="window.open('<?php echo $this->createUrl('/admin/dataentry/sa/view/surveyid/'.$surveyid.'/lang/'.$lang); ?>', '_top')" />
+		<input type='submit' value='<?php $clang->eT("Add another record"); ?>' onclick="window.location='<?php echo $this->createUrl('/admin/dataentry/sa/view/surveyid/'.$surveyid.'/lang/'.$lang); ?>'" />
 		<br /><br />
-        <input type='submit' value='<?php $clang->eT("Return to survey administration"); ?>' onclick="window.open('<?php echo $this->createUrl('admin/survey/sa/view/surveyid/'.$surveyid); ?>', '_top')" />
+        <input type='submit' value='<?php $clang->eT("Return to survey administration"); ?>' onclick="window.location='<?php echo $this->createUrl('admin/survey/sa/view/surveyid/'.$surveyid); ?>'" />
         <br /><br />
 
         <?php if(isset($thisid) && hasSurveyPermission($surveyid, 'responses','read')): ?>
-			<input type='submit' value='<?php $clang->eT("View this record"); ?>' onclick="window.open('<?php echo $this->createUrl('/admin/responses/sa/view/surveyid/'.$surveyid.'/id/'.$thisid); ?>', '_top')" />
+			<input type='submit' value='<?php $clang->eT("View this record"); ?>' onclick="window.location='<?php echo $this->createUrl('/admin/responses/sa/view/surveyid/'.$surveyid.'/id/'.$thisid); ?>'" />
 			<br /><br />
         <?php endif; ?>
 
         <?php if(isset($save)): ?>
-        	<input type='submit' value='<?php $clang->eT("Browse saved responses"); ?>' onclick="window.open('<?php echo $this->createUrl('/admin/saved/sa/view/surveyid/'.$surveyid.'/all'); ?>', '_top')" />
+        	<input type='submit' value='<?php $clang->eT("Browse saved responses"); ?>' onclick="window.location='<?php echo $this->createUrl('/admin/saved/sa/view/surveyid/'.$surveyid.'/all'); ?>'" />
         	<br /><br />
 		<?php endif; ?>
 	</div>

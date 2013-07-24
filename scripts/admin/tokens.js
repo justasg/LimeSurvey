@@ -371,7 +371,7 @@ $(document).ready(function() {
             title:viewParticipantsLink,
             buttonicon:'ui-participant-link',
             onClickButton:function(){
-                window.open(participantlinkUrl, "_top");
+                window.location=participantlinkUrl;
             }
         });
         $("#displaytokens").navButtonAdd('#pager', {

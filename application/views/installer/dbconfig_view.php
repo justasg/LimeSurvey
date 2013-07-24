@@ -84,7 +84,7 @@
         <table style="width: 694px; background: #ffffff;">
             <tbody>
                 <tr>
-                    <td align="left" style="width: 33%;"><input class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="button" value="<?php $clang->eT("Previous"); ?>" onclick="javascript: window.open('<?php echo $this->createUrl("installer/precheck"); ?>', '_top')" /></td>
+                    <td align="left" style="width: 33%;"><input class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="button" value="<?php $clang->eT("Previous"); ?>" onclick="javascript: window.location='<?php echo $this->createUrl("installer/precheck"); ?>'" /></td>
                     <td align="center" style="width: 34%;"></td>
                     <td align="right" style="width: 33%;"><?php echo CHtml::submitButton($clang->gT("Next"), array('class' => 'ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only')); ?></td>
                 </tr>
