@@ -1,12 +1,14 @@
-<br />
+
 <script type='text/javascript'>
     var getuserurl = '<?php echo $this->createUrl('admin/survey/sa/ajaxgetusers'); ?>';
     var ownerediturl = '<?php echo $this->createUrl('admin/survey/sa/ajaxowneredit'); ?>';
     var delmsg ='<?php $clang->eT("Are you sure you want to delete these surveys?",'js');?>';
+    var sWarningMsg = "<?php $clang->eT("Warning", 'js') ?>";
     var sCaption ='<?php $clang->eT("Surveys",'js');?>';
     var sSelectColumns ='<?php $clang->eT("Select columns",'js');?>';
     var sRecordText = '<?php $clang->eT("View {0} - {1} of {2}",'js');?>';
     var sPageText = '<?php $clang->eT("Page {0} of {1}",'js');?>';
+    var sSelectRowMsg = "<?php $clang->eT("Select at least one survey.", 'js') ?>";
     var sLoadText = '<?php $clang->eT("Loading...",'js');?>';
     var sDelTitle = '<?php $clang->eT("Delete selected survey(s)",'js');?>';
     var sDelCaption = '<?php $clang->eT("Delete",'js');?>';
@@ -40,9 +42,9 @@
     var jsonUrl = "<?php echo Yii::app()->getController()->createUrl('admin/survey/sa/getSurveys_json'); ?>";
     var editUrl = "<?php echo $this->createUrl('admin/survey/sa/editSurvey_json'); ?>";
     var colNames = ["<?php $clang->eT("Status") ?>","<?php $clang->eT("SID") ?>","<?php $clang->eT("Survey") ?>","<?php $clang->eT("Date created") ?>","<?php $clang->eT("Owner") ?>","<?php $clang->eT("Access") ?>","<?php $clang->eT("Anonymized responses") ?>","<?php $clang->eT("Full") ?>","<?php $clang->eT("Partial") ?>","<?php $clang->eT("Total") ?>","<?php $clang->eT("Tokens available") ?>","<?php $clang->eT("Response rate") ?>"];
-    var colModels = [{ "name":"status", "index":"status", "width":15, "align":"center", "sorttype":"string", "sortable": true, "editable":false},
+    var colModels = [{ "name":"status", "index":"status", "width":25, "align":"center", "sorttype":"string", "sortable": true, "editable":false},
     { "name":"sid", "index":"sid", "sorttype":"int", "sortable": true, "width":15, "align":"center", "editable":false},
-    { "name":"survey", "index":"survey", "sorttype":"string", "sortable": true, "width":100, "align":"left", "editable":true},
+    { "name":"survey", "index":"survey", "sorttype":stripLinkSort, "sortable": true, "width":100, "align":"left", "editable":true},
     { "name":"date_created", "index":"date_created", "sorttype":"string", "sortable": true,"width":25, "align":"center", "editable":false},
     { "name":"owner", "index":"owner","align":"center","width":40, "sorttype":"string", "sortable": true, "editable":true},
     { "name":"access", "index":"access","align":"center","width":25,"sorttype":"string", "sortable": true, "editable":true, "edittype":"checkbox", "editoptions":{ "value":"Y:N"}},
@@ -52,8 +54,11 @@
     { "name":"total", "index":"total","align":"center", "sorttype":"int", "sortable": true,"width":25,"editable":false},
     { "name":"available", "index":"available","align":"center", "sorttype":"int", "sortable": true,"width":25,"editable":false},
     { "name":"rate", "index":"rate","align":"center", "sorttype":"int", "sortable": true,"width":25,"editable":false}];
+    function stripLinkSort(cell) {
+        var cellText = $(cell).text().toLowerCase();
+        return cellText;
+    }
 </script>
-<br/>
 <table id="displaysurveys"></table> <div id="pager"></div>
 <select id='gs_status_select' style='display: none'>
     <option value=''><?php $clang->eT("Any") ?></option>

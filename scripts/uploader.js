@@ -1,4 +1,8 @@
 $(document).ready(function(){
+    doFileUpload();
+});
+
+function doFileUpload(){
     var fieldname = $('#ia').val();
 
     /* Load the previously uploaded files */
@@ -58,7 +62,8 @@ $(document).ready(function(){
             max_filesize : $('#'+fieldname+'_maxfilesize').val(),
             preview : $('#preview').val(),
             surveyid : surveyid,
-            fieldname : fieldname
+            fieldname : fieldname,
+            YII_CSRF_TOKEN : csrfToken
         },
         onSubmit : function(file, ext){
 
@@ -183,7 +188,7 @@ $(document).ready(function(){
 
     // if it has been jst opened, the upload button should be automatically clicked !
     // TODO: auto open using click() not working at all ! :(
-});
+}
 
 function isValueInArray(arr, val) {
     inArray = false;
@@ -207,12 +212,12 @@ function passJSON(fieldname, show_title, show_comment, pos) {
         {
             if (filecount > 0)
                 json += ",";
-            json += '{';
+            json += '{ ';
 
             if ($("#"+fieldname+"_show_title").val() == 1)
-                json += '"title":"' +$("#"+fieldname+"_title_"  +i).val().replace(/"/g, '\"')+'",';
+                json += '"title":"' +$("#"+fieldname+"_title_"  +i).val().replace(/"/g, '\\"')+'",';
             if ($("#"+fieldname+"_show_comment").val() == 1)
-                json += '"comment":"'+$("#"+fieldname+"_comment_"+i).val().replace(/"/g, '\"')+'",';
+                json += '"comment":"'+$("#"+fieldname+"_comment_"+i).val().replace(/"/g, '\\"')+'",';
             json += '"size":"'   +$("#"+fieldname+"_size_"   +i).val()+'",'+
                     '"name":"'   +$("#"+fieldname+"_name_"   +i).val()+'",'+
                     '"filename":"'   +$("#"+fieldname+"_filename_"   +i).val()+'",'+
@@ -228,9 +233,10 @@ function passJSON(fieldname, show_title, show_comment, pos) {
 function saveAndExit(fieldname, show_title, show_comment, pos) {
     var filecount = parseInt($('#'+fieldname+'_filecount').val());
     var minfiles  = parseInt($('#'+fieldname+'_minfiles').val());
-    if (minfiles != 0 && filecount < minfiles)
+
+    if (minfiles != 0 && filecount < minfiles && showpopups)
     {
-        var confirmans = confirm(translt.errorNeedMore.replace('%s', (minfiles - filecount)))
+        var confirmans = confirm(translt.errorNeedMoreConfirm.replace('%s', (minfiles - filecount)))
         if (confirmans)
         {
             passJSON(fieldname, show_title, show_comment, pos);

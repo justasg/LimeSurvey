@@ -46,5 +46,5 @@
         <?php
         }
     ?>
-    <input type='submit' value='<?php $clang->eT("Return to label set administration"); ?>' onclick="window.location='<?php echo $this->createUrl('admin/labels/view') ?>'" />
+    <input type='submit' value='<?php $clang->eT("Return to label set administration"); ?>' onclick="window.open('<?php echo $this->createUrl('admin/labels/sa/view') ?>', '_top')" />
 </div><br />

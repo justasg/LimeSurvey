@@ -60,6 +60,7 @@ $config['timeOutTime']        =   60 * 10;          // Lock them out for 10 minu
 
 // Site Settings
 $config['dropdownthreshold']  =   '25';             // The number of answers to a list type question before it switches from Radio Buttons to List
+$config['printanswershonorsconditions'] = 1;        // If set to 1, only relevant answers to questions can be printed by user. If set to 0, also questions not shown are printed
 
 // Only applicable, of course, if you have chosen 'R' for $dropdowns and/or $lwcdropdowns
 $config['repeatheadings']     =   '25';             // The number of answers to show before repeating the headings in array (flexible) questions. Set to 0 to turn this feature off
@@ -68,7 +69,7 @@ $config['defaultlang']        =   'en';             // The default language to u
 
 $config['timeadjust']         =   0;                // Number of hours to adjust between your webserver local time and your own local time (for datestamping responses)
 $config['allowexportalldb']   =   1;                // 0 will only export prefixed tables when doing a database dump. If set to 1 ALL tables in the database will be exported
-$config['maxdumpdbrecords']   =   2000;             // The maximum number of records that would be ouputted in a go during a database backup. Reduce this number if you're getting errors while backing up the entire database.
+$config['maxdumpdbrecords']   =   500;              // The maximum number of records that would be ouputted in a go during a database backup. Reduce this number if you're getting errors while backing up the entire database.
 $config['allowmandbackwards'] =   1;                // Allow moving backwards (ie: << prev) through survey if a mandatory question
 // has not been answered. 1=Allow, 0=Deny
 $config['deletenonvalues']    =   1;                // By default, LimeSurvey does not save responses to conditional questions that haven't been answered/shown. To have LimeSurvey save these responses change this value to 0.
@@ -83,7 +84,7 @@ $config['allowunblacklist']     =  'N';             // Allow participant to unbl
 $config['userideditable']     =  'N';               // Allow editing of user IDs
 $config['defaulttemplate']    =  'default';         // This setting specifys the default theme used for the 'public list' of surveys
 
-$config['allowedtemplateuploads'] = 'gif,ico,jpg,png';  // File types allowed to be uploaded in the templates section.
+$config['allowedtemplateuploads'] = 'gif,ico,jpg,png,css,js';  // File types allowed to be uploaded in the templates section.
 
 $config['allowedresourcesuploads'] = '7z,aiff,asf,avi,bmp,csv,doc,fla,flv,gif,gz,gzip,ico,jpeg,jpg,mid,mov,mp3,mp4,mpc,mpeg,mpg,ods,odt,pdf,png,ppt,pxd,qt,ram,rar,rm,rmi,rmvb,rtf,sdc,sitd,swf,sxc,sxw,tar,tgz,tif,tiff,txt,vsd,wav,wma,wmv,xls,xml,zip,pstpl,css,js';   // File types allowed to be uploaded in the resources sections, and with the HTML Editor
 
@@ -182,15 +183,11 @@ $config['auth_webserver_autocreate_profile'] = Array(
     'full_name' => 'autouser',
     'email' => 'autouser@test.test',
     'lang' => 'en',
-    'htmleditormode' => $config['defaulthtmleditormode'],
-    'templatelist' => 'default,basic',
-    'create_survey' => 1,
-    'create_user' => 0,
-    'delete_user' => 0,
-    'superadmin' => 0,
-    'configurator' => 0,
-    'manage_template' => 0,
-    'manage_label' => 0
+    'htmleditormode' => $config['defaulthtmleditormode']
+);
+
+$config['auth_webserver_autocreate_permissions'] = Array(
+	'surveys' => array('create'=>true,'read'=>true,'update'=>true,'delete'=>true)
 );
 
 // hook_get_auth_webserver_profile
@@ -208,15 +205,7 @@ $config['auth_webserver_autocreate_profile'] = Array(
 //			'full_name' => '$user_name',
 //			'email' => "$user_name@localdomain.org",
 //			'lang' => 'en',
-//			'htmleditormode' => 'inline',
-//			'templatelist' => 'default,basic,MyOrgTemplate',
-//			'create_survey' => 1,
-//			'create_user' => 0,
-//			'delete_user' => 0,
-//			'superadmin' => 0,
-//			'configurator' =>0,
-//			'manage_template' => 0,
-//			'manage_label' => 0);
+//			'htmleditormode' => 'inline');
 //}
 
 
@@ -333,7 +322,7 @@ $config['pdfdefaultfont'] = 'auto';              //Default font for the pdf Expo
 *  Some langage are not tested : need translation for Yes,No and Gender : ckb, swh
 */
 $config['alternatepdffontfile']=array(
-    'ar'=>'freesans',// 'dejavusans' work too but maybe more characters in aealarabiya or almohanad: but then need a dynamic font size too
+    'ar'=>'dejavusans',// 'dejavusans' work but maybe more characters in aealarabiya or almohanad: but then need a dynamic font size too
     'be'=>'dejavusans',
     'bg'=>'dejavusans',
     'zh-Hans'=>'chinese',
@@ -370,6 +359,9 @@ $config['notsupportlanguages'] = array(
 $config['pdffontsize']    = 9;                       //Fontsize for normal text; Surveytitle is +4; grouptitle is +2
 $config['pdforientation'] = 'P';                     // Set L for Landscape or P for portrait format
 
+// QueXML-PDF: If set to true, the printable_help attribute will be visible on the exported PDF questionnaires
+// If used, the appearance (font size, justification, etc.) may be adjusted by editing td.questionHelpBefore and $helpBeforeBorderBottom of quexml.
+$config['quexmlshowprintablehelp'] = false;
 
 // CAS Settings
 /**
@@ -408,9 +400,9 @@ $config['alternatechartfontfile']=array(
     'ko'=>'UnBatang.ttf',
     'si'=>'FreeSans.ttf',
     'th'=>'TlwgTypist.ttf',
+    'zh-Hans'=>'fireflysung.ttf',
     'zh-Hant-HK'=>'fireflysung.ttf',
-    'zh-Hant-HK'=>'fireflysung.ttf',
-    'zh-Hant-HK'=>'fireflysung.ttf',
+    'zh-Hant-TW'=>'fireflysung.ttf',
 );
 
 /**
@@ -425,11 +417,6 @@ $config['chartfontsize'] =10;
 * Recommended: 7
 */
 $config['updatecheckperiod']=7;
-
-/**
-* $updatekey - Sets the default update key for the ComfortUpdater
-*/
-$config['updatekey']='';
 
 
 /**
@@ -558,6 +545,14 @@ $config['iSessionExpirationTime'] = 7200;
 */
 $config['InsertansUnsupportedtypes'] = array();
 
+/**
+* This parameter sets if and what update notifications are shown to the administrator. Valid values are 'never', 'stable', 'both' (for stable and unstable)
+* Default is 'stable'
+* @var string
+*/
+$config['updatenotification'] = 'both';
+
+
 // === Advanced Setup
 // The following parameters need information from config.php
 // and thus are defined here (After reading your config.php file).
@@ -604,6 +599,15 @@ $config['uploaddir']               = $config['rootdir'].DIRECTORY_SEPARATOR."upl
 $config['standardtemplaterootdir'] = $config['rootdir'].DIRECTORY_SEPARATOR."templates";   // The directory path of the standard templates
 $config['usertemplaterootdir']     = $config['uploaddir'].DIRECTORY_SEPARATOR."templates"; // The directory path of the user templates
 $config['styledir']                = $config['rootdir'].DIRECTORY_SEPARATOR.'styles';
+
+// Use alias notation, we should move to this format everywhere.
+$config['plugindir']               = 'webroot.plugins';
+
+// (javascript) Fix automatically the value entered in numeric question type : 1: remove all non numeric caracters; 0 : leave all caracters
+$config['bFixNumAuto']             = 1;
+// (javascript) Send real value entered when using Numeric question type in Expression Manager : 0 : {NUMERIC} with bad caracters send '', 1 : {NUMERIC} send all caracters entered
+$config['bNumRealValue']             = 0;
+
 
 return $config;
 //settings deleted

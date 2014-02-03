@@ -81,8 +81,8 @@
         <input type='submit' value='<?php $clang->eT("Return to survey administration"); ?>' onclick="window.location='<?php echo $this->createUrl('admin/survey/sa/view/surveyid/'.$surveyid); ?>'" />
         <br /><br />
 
-        <?php if(isset($thisid) && hasSurveyPermission($surveyid, 'responses','read')): ?>
-			<input type='submit' value='<?php $clang->eT("View this record"); ?>' onclick="window.location='<?php echo $this->createUrl('/admin/responses/sa/view/surveyid/'.$surveyid.'/id/'.$thisid); ?>'" />
+        <?php if(isset($thisid) && Permission::model()->hasSurveyPermission($surveyid, 'responses','read')): ?>
+			<input type='submit' value='<?php $clang->eT("View this record"); ?>' onclick="window.open('<?php echo $this->createUrl('/admin/responses/sa/view/surveyid/'.$surveyid.'/id/'.$thisid); ?>', '_top')" />
 			<br /><br />
         <?php endif; ?>
 

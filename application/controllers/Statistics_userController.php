@@ -10,7 +10,6 @@
  * other free or open source software licenses.
  * See COPYRIGHT.php for copyright notices and details.
  *
- *	$Id$
  */
 
 /*
@@ -23,7 +22,6 @@
  * to determine whether the results of a certain question should be shown to the user
  * after he/she has submitted the survey.
  *
- * See http://docs.limesurvey.org/tiki-index.php?page=Question+attributes#public_statistics
  */
 
 class Statistics_userController extends LSYii_Controller {
@@ -37,6 +35,11 @@ class Statistics_userController extends LSYii_Controller {
 
 	function actionAction($surveyid,$language)
 	{
+		ob_start(function($buffer, $phase) {
+			App()->getClientScript()->render($buffer);
+			return $buffer;
+		});
+		ob_implicit_flush(false);
 		$iSurveyID=(int)$surveyid;
         //$postlang = returnglobal('lang');
 		Yii::import('application.libraries.admin.progressbar',true);
@@ -167,10 +170,10 @@ class Statistics_userController extends LSYii_Controller {
 		 * only show questions where question attribute "public_statistics" is set to "1"
 		 */
 
-        $query = "SELECT q.* , group_name, group_order FROM {{questions}} q, {{groups}} g, {{question_attributes}} qa 
+        $query = "SELECT q.* , group_name, group_order FROM {{questions}} q, {{groups}} g, {{question_attributes}} qa
                     WHERE g.gid = q.gid AND g.language = :lang1 AND q.language = :lang2 AND q.sid = :surveyid AND q.qid = qa.qid AND q.parent_qid = 0 AND qa.attribute = 'public_statistics'";
         $databasetype = Yii::app()->db->getDriverName();
-        if ($databasetype=='mssql' || $databasetype=="sqlsrv")
+        if ($databasetype=='mssql' || $databasetype=="sqlsrv" || $databasetype=="dblib")
         {
             $query .=" AND CAST(CAST(qa.value as varchar) as int)='1'\n";
         }
@@ -355,21 +358,21 @@ class Statistics_userController extends LSYii_Controller {
 		}// end if -> for removing the error message in case there are no filters
 		$summary = $allfields;
 
-        
+
         // Get the survey inforamtion
         $thissurvey = getSurveyInfo($surveyid,$language);
 
         //SET THE TEMPLATE DIRECTORY
         if (!isset($thissurvey['templatedir']) || !$thissurvey['templatedir'])
         {
-            $data['sTemplatePath'] = validateTemplateDir("default");
+            $data['sTemplatePath'] = validateTemplateDir(Yii::app()->getConfig("defaulttemplate"));
         }
         else
         {
             $data['sTemplatePath'] = validateTemplateDir($thissurvey['templatedir']);
         }
-        
-        
+
+
 		//---------- CREATE STATISTICS ----------
         $redata = compact(array_keys(get_defined_vars()));
         doHeader();
@@ -396,7 +399,7 @@ class Statistics_userController extends LSYii_Controller {
 
 
 		// 1: Get list of questions with answers chosen
-		//"Getting Questions and Answers ..." is shown above the bar
+		//"Getting Questions and Answer ..." is shown above the bar
 		$prb->setLabelValue('txt1',$clang->gT('Getting questions and answers ...'));
 		$prb->moveStep(5);
 
@@ -452,8 +455,8 @@ class Statistics_userController extends LSYii_Controller {
 
         $redata = compact(array_keys(get_defined_vars()));
         $data['redata'] = $redata;
-        header_includes('statistics_user.js');
-		$this->render('/statistics_user_view',$data);
+		Yii::app()->getClientScript()->registerScriptFile(Yii::app()->getConfig('generalscripts') . 'statistics_user.js');
+        $this->renderPartial('/statistics_user_view',$data);
 
 		//output footer
 		echo getFooter();

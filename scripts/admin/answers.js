@@ -60,7 +60,7 @@ function deleteinput()
 
     // 1.) Check if there is at least one answe
 
-    countanswers=$(this).parent().parent().parent().children().length;
+    countanswers=$(this).closest("tbody").children("tr").length;//Maybe use class is better
     if (countanswers>1)
         {
         // 2.) Remove the table row
@@ -137,11 +137,11 @@ function addinput()
             assessment_type='hidden';
         }
         if (x==0) {
-            inserthtml='<tr class="row_'+newposition+'" style="display:none;"><td><img class="handle" src="' + sImageURL + 'handle.png" /></td><td><input class="code" onkeypress="return goodchars(event,\'1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWZYZ_\')" type="text" maxlength="5" size="5" value="'+htmlspecialchars(sNextCode)+'" /></td><td '+assessment_style+'><input class="assessment" type="'+assessment_type+'" maxlength="5" size="5" value="1"/></td><td><input type="text" size="100" class="answer" value="'+htmlspecialchars(newansweroption_text)+'"></input><a class="editorLink"><img class="btneditanswerena" src="' + sImageURL + 'edithtmlpopup.png" width="16" height="16" border="0" /><img class="btneditanswerdis" alt="Give focus to the HTML editor popup window" src="' + sImageURL + 'edithtmlpopup_disabled.png" style="display: none;" width="16" height="16" align="top" border="0" /></a></td><td><img src="' + sImageURL + 'addanswer.png" class="btnaddanswer" /><img src="' + sImageURL + 'deleteanswer.png" class="btndelanswer" /></td></tr>'
+            inserthtml='<tr class="row_'+newposition+'" style="display:none;"><td><img class="handle" src="' + sImageURL + 'handle.png" /></td><td><input class="code" onkeypress="return goodchars(event,\'1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWZYZ_\')" type="text" maxlength="5" size="5" required value="'+htmlspecialchars(sNextCode)+'" /></td><td '+assessment_style+'><input class="assessment" type="'+assessment_type+'" maxlength="5" size="5" value="1"/></td><td><input type="text" size="100" class="answer" placeholder="'+htmlspecialchars(newansweroption_text)+'" value="" /><a class="editorLink"><img class="btneditanswerena" src="' + sImageURL + 'edithtmlpopup.png" width="16" height="16" border="0" /><img class="btneditanswerdis" alt="Give focus to the HTML editor popup window" src="' + sImageURL + 'edithtmlpopup_disabled.png" style="display: none;" width="16" height="16" align="top" border="0" /></a></td><td><img src="' + sImageURL + 'addanswer.png" class="btnaddanswer" /><img src="' + sImageURL + 'deleteanswer.png" class="btndelanswer" /></td></tr>'
         }
         else
             {
-            inserthtml='<tr class="row_'+newposition+'" style="display:none;"><td>&nbsp;</td><td>'+htmlspecialchars(sNextCode)+'</td><td><input type="text" size="100" class="answer" value="'+htmlspecialchars(newansweroption_text)+'"></input><a class="editorLink"><img class="btneditanswerena" src="' + sImageURL + '"edithtmlpopup.png" width="16" height="16" border="0" /><img class="btneditanswerdis" alt="Give focus to the HTML editor popup window" src="' + sImageURL + 'edithtmlpopup_disabled.png" style="display: none;" width="16" height="16" align="top" border="0" /></a></td><td><img src="' + sImageURL + 'addanswer.png" class="btnaddanswer" /><img src="' + sImageURL + 'deleteanswer.png" class="btndelanswer" /></td></tr>'
+            inserthtml='<tr class="row_'+newposition+'" style="display:none;"><td>&nbsp;</td><td>'+htmlspecialchars(sNextCode)+'</td><td><input type="text" size="100" class="answer" placeholder="'+htmlspecialchars(newansweroption_text)+'" value="" /><a class="editorLink"><img class="btneditanswerena" src="' + sImageURL + 'edithtmlpopup.png" width="16" height="16" border="0" /><img class="btneditanswerdis" alt="Give focus to the HTML editor popup window" src="' + sImageURL + 'edithtmlpopup_disabled.png" style="display: none;" width="16" height="16" align="top" border="0" /></a></td><td></td></tr>'
         }
         tablerow.after(inserthtml);
         tablerow.next().find('.btnaddanswer').click(addinput);
@@ -219,7 +219,7 @@ function updaterowproperties()
         var rownumber=1;
         $(this).children('tr').each(function(){
 
-            $(this).removeClass();
+            $(this).attr('class','');//see http://bugs.jqueryui.com/ticket/9015
             if (highlight){
                 $(this).addClass('highlight');
             }
@@ -368,42 +368,39 @@ function lspreview()
             data: {lid:lsid, sid:surveyid},
             cache: true,
             success: function(json){
-                $("#labelsetpreview").tabs('destroy');
                 $("#labelsetpreview").empty();
                 var tabindex='';
                 var tabbody='';
                 for ( x in json)
-                    {
-
+                {
                     language=json[x];
                     for (y in language)
-                        {
+                    {
                         tabindex=tabindex+'<li><a href="#language_'+y+'">'+language[y][1]+'</a></li>';
                         tabbody=tabbody+"<div id='language_"+y+"'><table class='limetable'>";
                         lsrows=language[y][0];
                         tablerows='';
                         var highlight=true;
                         for (z in lsrows)
-                            {
+                        {
                             highlight=!highlight;
                             tabbody=tabbody+'<tbody><tr';
                             if (highlight==true) {
                                 tabbody=tabbody+" class='highlight' ";
                             }
-                            if (lsrows[z].title==null)
-                                {
+                            if (lsrows[z].title==null) {
                                 lsrows[z].title='';
                             }
                             tabbody=tabbody+'><td>'+lsrows[z].code+'</td>';
                             if (assessmentvisible)
-                                {
+                            {
                                 tabbody=tabbody+'<td>'+lsrows[z].assessment_value+'</td>';
                             }
                             tabbody=tabbody+'<td>'+lsrows[z].title+'</td></tr><tbody>';
                         }
                         tabbody=tabbody+'<thead><tr><th>'+strcode+'</th>';
                         if (assessmentvisible)
-                            {
+                        {
                             tabbody=tabbody+'<th>'+sAssessmentValue+'</th>';
                         }
                         tabbody=tabbody+'<th>'+strlabel+'</th></tr></thead></table></div>';
@@ -412,15 +409,16 @@ function lspreview()
                 $("#labelsetpreview").append('<ul>'+tabindex+'</ul>'+tabbody);
                 labelcache[lsid]='<ul>'+tabindex+'</ul>'+tabbody;
                 $("#labelsetpreview").tabs();
-        }}
-        );
+                $("#labelsetpreview").tabs('refresh');
+            }
+        });
     }
     else
-        {
-        $("#labelsetpreview").tabs('destroy');
+    {
         $("#labelsetpreview").empty();
         $("#labelsetpreview").append(labelcache[lsid]);
         $("#labelsetpreview").tabs();
+        $("#labelsetpreview").tabs('refresh');
     }
 
 
@@ -663,9 +661,9 @@ function setlabel()
     {
         case 'newlabel':
         if(!flag[0]){
-            $('#lasets').remove();
-            $($(this).next().next()).after('<label for="laname">Label Set Name :</label> ' +
-            '<input type="text" name="laname" id="laname">');
+            $('#lasets').parent().remove();
+            $(this).parent().after('<p class="label-name-wrapper"><label for="laname">'+sLabelSetName+':</label> ' +
+            '<input type="text" name="laname" id="laname"></p>');
             flag[0] = true;
             flag[1] = false;
         }
@@ -673,9 +671,8 @@ function setlabel()
 
         case 'replacelabel':
         if(!flag[1]){
-            $('#laname').remove();
-            $('[for=laname]').remove();
-            $($(this).next().next()).after('<select name="laname" id="lasets"><option value=""></option></select>');
+            $('#laname').parent().remove();
+            $(this).parent().after('<p class="label-name-wrapper"><select name="laname" id="lasets"><option value=""></option></select></p>');
             jQuery.getJSON(lanameurl, function(data) {
                 $.each(data, function(key, val) {
                     $('#lasets').append('<option value="' + key + '">' + val + '</option>');
@@ -751,7 +748,6 @@ function ajaxcheckdup()
 
 function ajaxreqsave() {
     var lid = $('#lasets').val() ? $('#lasets').val() : 0;
-
     // get code for the current scale
     var code = new Array();
     $('.code').each(function(index) {
@@ -772,7 +768,7 @@ function ajaxreqsave() {
     }
 
 
-    $.post(lasaveurl, { laname: $('#laname').val(), lid: lid, code: code, answers: answers }, function(data) {
+    $.post(lasaveurl, { laname: $('#laname').val(), lid: lid, code: code, answers: answers, }, function(data) {
         $("#saveaslabel").dialog('close');
         if(jQuery.parseJSON(data) == "ok")
             {

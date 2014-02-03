@@ -10,7 +10,6 @@
 * other free or open source software licenses.
 * See COPYRIGHT.php for copyright notices and details.
 *
-*	$Id$
 */
 
 
@@ -48,10 +47,20 @@ function createTokenTable($iSurveyID, $aAttributeFields=array())
         $fields[$sAttributeField]='string';
     }
     try{
-        createTable("{{tokens_".intval($iSurveyID)."}}", $fields);
+        $sTableName="{{tokens_".intval($iSurveyID)."}}";
+        createTable($sTableName, $fields);
         try{
             Yii::app()->db->createCommand()->createIndex("idx_token_token_{$iSurveyID}_".rand(1,50000),"{{tokens_".intval($iSurveyID)."}}",'token');
         } catch(Exception $e) {}
+        Yii::app()->db->schema->getTable($sTableName, true); // Refresh schema cache just in case the table existed in the past
+
+        // create fields for the custom token attributes associated with this survey
+        $tokenattributefieldnames = Survey::model()->findByPk($iSurveyID)->tokenAttributes;
+        foreach($tokenattributefieldnames as $attrname=>$attrdetails)
+        {
+            Yii::app()->db->createCommand(Yii::app()->db->getSchema()->addColumn("{{tokens_".intval($iSurveyID)."}}", $attrname, 'VARCHAR(255)'))->execute();
+        }
+
         return true;
     } catch(Exception $e) {
         return false;
@@ -78,8 +87,8 @@ function emailTokens($iSurveyID,$aResultTokens,$sType)
 		$bHtml = false;
 	
 	$attributes = array_keys(getTokenFieldsAndNames($iSurveyID));	
-	$oSurveyLocale=Surveys_languagesettings::model()->findAllByAttributes(array('surveyls_survey_id' => $iSurveyID));
-	$oTokens = Tokens_dynamic::model($iSurveyID);		
+	$oSurveyLocale=SurveyLanguageSetting::model()->findAllByAttributes(array('surveyls_survey_id' => $iSurveyID));
+	$oTokens = Token::model($iSurveyID);
 	$aSurveyLangs = $oSurvey->additionalLanguages;
 	array_unshift($aSurveyLangs, $oSurvey->language);
 			

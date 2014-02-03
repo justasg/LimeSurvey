@@ -96,7 +96,7 @@
                 if (isset($datestamp) && $datestamp == "Y") {?>
                     <fieldset id='right'><legend><?php $clang->eT("Submission date"); ?></legend><ul><li>
                     <label for='datestampE'><?php $clang->eT("Equals:"); ?></label>
-                    <?php echo CHtml::textField('datestampeE',isset($_POST['datestampE'])?$_POST['datestampE']:'',array('id'=>'datestampE', 'class'=>'popupdate', 'size'=>'12'));?>
+                    <?php echo CHtml::textField('datestampE',isset($_POST['datestampE'])?$_POST['datestampE']:'',array('id'=>'datestampE', 'class'=>'popupdate', 'size'=>'12'));?>
                     </li><li><label for='datestampG'><?php $clang->eT("Later than:");?></label>
                     <?php echo CHtml::textField('datestampG',isset($_POST['datestampG'])?$_POST['datestampG']:'',array('id'=>'datestampG', 'class'=>'popupdate', 'size'=>'12'));?>
                     </li><li><label for='datestampL'><?php $clang->eT("Earlier than:");?></label>
@@ -137,7 +137,7 @@
         </div>
         <p>
             <input type='submit' value='<?php $clang->eT("View statistics"); ?>' />
-            <input type='button' value='<?php $clang->eT("Clear"); ?>' onclick="window.location='<?php echo Yii::app()->getController()->createUrl("admin/statistics/sa/surveyid/$surveyid"); ?>'" />
+            <input type='button' value='<?php $clang->eT("Clear"); ?>' onclick="window.open('<?php echo Yii::app()->getController()->createUrl("admin/statistics/sa/index/surveyid/$surveyid"); ?>', '_top')" />
         </p>
     </div>
     <div style='clear: both'></div>
@@ -308,7 +308,7 @@
                     echo "\t</tr>\n\t<tr>\n";
 
                     //get subqestions
-                    $result[$key1] = Questions::model()->getQuestionsForStatistics('title as code, question as answer', "parent_qid='$flt[0]' AND language = '{$language}'", 'question_order');
+                    $result[$key1] = Question::model()->getQuestionsForStatistics('title as code, question as answer', "parent_qid='$flt[0]' AND language = '{$language}'", 'question_order');
                     $counter2=0;
 
                     //loop through all answers
@@ -536,7 +536,7 @@
                     echo "\t</tr>\n\t<tr>\n";
 
                     //get answers
-                    $result[$key1] = Questions::model()->getQuestionsForStatistics('title, question', "parent_qid='$flt[0]' AND language = '{$language}'", 'question_order');
+                    $result[$key1] = Question::model()->getQuestionsForStatistics('title, question', "parent_qid='$flt[0]' AND language = '{$language}'", 'question_order');
                     $counter2=0;
 
                     //check all the results
@@ -812,7 +812,7 @@
                     foreach($result[$key1] as $row)
                     {
                         $row = array_values($row);
-                        $fresult = Questions::model()->getQuestionsForStatistics('*', "parent_qid='$flt[0]' AND language = '{$language}' AND scale_id = 1", 'question_order, title');
+                        $fresult = Question::model()->getQuestionsForStatistics('*', "parent_qid='$flt[0]' AND language = '{$language}' AND scale_id = 1", 'question_order, title');
                         foreach($fresult as $frow)
                         {
                             $myfield2 = $myfield . $row[0] . "_" . $frow['title'];
@@ -1066,7 +1066,7 @@
                         * - sortorder
                         * - language
                         */
-                        $fresult = Answers::model()->getQuestionsForStatistics('*', "qid='$flt[0]' AND language = '{$language}' AND scale_id = 0", 'sortorder, code');
+                        $fresult = Answer::model()->getQuestionsForStatistics('*', "qid='$flt[0]' AND language = '{$language}' AND scale_id = 0", 'sortorder, code');
 
                         //this is for debugging only
                         //echo $fquery;
@@ -1142,7 +1142,7 @@
                         echo " />&nbsp;<strong>"
                         ._showSpeaker($niceqtext." [".str_replace("'", "`", $row[1])."] - ".$clang->gT("Label").": ".$labeltitle2)
                         ."</strong><br />\n";
-                        $fresult = Answers::model()->getQuestionsForStatistics('*', "qid='$flt[0]' AND language = '$language' AND scale_id = 1", 'sortorder, code');
+                        $fresult = Answer::model()->getQuestionsForStatistics('*', "qid='$flt[0]' AND language = '$language' AND scale_id = 1", 'sortorder, code');
 
                         //this is for debugging only
                         //echo $fquery;

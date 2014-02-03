@@ -10,7 +10,6 @@
 * other free or open source software licenses.
 * See COPYRIGHT.php for copyright notices and details.
 *
-*	$Id$
 */
 
 //include_once("login_check.php");
@@ -21,16 +20,12 @@ function updateset($lid)
     $clang = Yii::app()->lang;
 
     // Get added and deleted languagesid arrays
-    if ($_POST['languageids'])
-        $postlanguageids = sanitize_languagecodeS($_POST['languageids']);
-
-    if ($_POST['label_name'])
-        $postlabel_name = sanitize_labelname($_POST['label_name']);
-
+    $postlanguageids=Yii::app()->getRequest()->getPost('languageids');
+    $postlabel_name=Yii::app()->getRequest()->getPost('label_name');
     $newlanidarray = explode(" ",trim($postlanguageids));
 
     $oldlangidsarray = array();
-    $labelset = Labelsets::model()->findByAttributes(array('lid' => $lid));
+    $labelset = LabelSet::model()->findByAttributes(array('lid' => $lid));
     $oldlangidsarray = explode(' ', $labelset->languages);
 
     $addlangidsarray = array_diff($newlanidarray, $oldlangidsarray);
@@ -97,29 +92,19 @@ function insertlabelset()
     //	$labelsoutput.= $_POST['languageids'];  For debug purposes
     $clang = Yii::app()->lang;
 
+    $postlanguageids=sanitize_languagecodeS(Yii::app()->getRequest()->getPost('languageids'));
+    $postlabel_name=flattenText(Yii::app()->getRequest()->getPost('label_name'),false,true,'UTF-8',true);
 
-    if (!empty($_POST['languageids']))
-    {
-        $postlanguageids=sanitize_languagecodeS($_POST['languageids']);
-    }
-
-    if (!empty($_POST['label_name']))
-    {
-        $postlabel_name=sanitize_labelname($_POST['label_name']);
-    }
-
-    //postlabel_name = dbQuoteAll($postlabel_name,true);
-    //$postlanguageids = dbQuoteAll($postlanguageids,true);
     $data = array(
     'label_name' => $postlabel_name,
     'languages' => $postlanguageids
     );
 
     //$query = "INSERT INTO ".db_table_name('labelsets')." (label_name,languages) VALUES ({$postlabel_name},{$postlanguageids})";
-    $result=Labelsets::model()->insertRecords($data);
+    $result=LabelSet::model()->insertRecords($data);
     if (!$result)
     {
-        safeDie("Inserting the label set failed:<br />".$query."<br />");
+        Yii::app()->session['flashmessage'] = $clang->gT("Inserting the label set failed.");
     }
     else
     {
@@ -199,7 +184,7 @@ function modlabelsetanswers($lid)
         }
         if(count($aErrors))
         {
-            Yii::app()->session['flashmessage'] = $clang->gT("Labels updated but with some error");
+            Yii::app()->session['flashmessage'] = $clang->gT("Not all labels were updated successfully.");
         }
         else
         {
@@ -208,17 +193,10 @@ function modlabelsetanswers($lid)
     }
     else
     {
-        $labelsoutput= "<script type=\"text/javascript\">\n<!--\n alert(\"".$clang->gT("Can't update labels because you are using duplicated codes","js")."\")\n //-->\n</script>\n";
+        Yii::app()->setFlashMessage($clang->gT("Can't update labels because you are using duplicated codes"),'error');
     }
 
     if ($ajax){ die(); }
-
-    if (isset($labelsoutput))
-    {
-        echo $labelsoutput;
-        exit();
-    }
-
 }
 
 /**

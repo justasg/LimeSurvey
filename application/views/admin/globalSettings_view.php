@@ -1,3 +1,7 @@
+<?php
+    App()->getClientScript()->registerPackage('jquery-selectboxes');
+
+?>
 <script type="text/javascript">
     var msgAtLeastOneLanguageNeeded = '<?php $clang->eT("You must set at last one available language.",'js'); ?>';
 </script>
@@ -48,16 +52,16 @@
                 ?>
             </table>
             <?php
-                if (Yii::app()->session['USER_RIGHT_CONFIGURATOR'] == 1)
+                if (Permission::model()->hasGlobalPermission('superadmin','read'))
                 {
                 ?>
-                <p><input type="button" onclick="window.open('<?php echo Yii::app()->getController()->createUrl("admin/globalsettings/showphpinfo"); ?>')" value="<?php $clang->eT("Show PHPInfo"); ?>" />
-                    <?php
-                    }
+                    <p><a href="<?php echo $this->createUrl('admin/globalsettings',array('sa'=>'showphpinfo')) ?>" target="blank" class="button"><?php $clang->eT("Show PHPInfo"); ?></a></p>
+                <?php
+                }
                 ?>
 
-                <br /><br/></p><div class='header ui-widget-header'><?php echo $clang->eT("Updates"); ?></div><br/><ul>
-                <li><label for='updatecheckperiod'><?php echo $clang->eT("Check for updates:"); ?></label>
+                <div class='header ui-widget-header'><?php echo $clang->eT("Updates"); ?></div><br/><ul>
+                <li><label for='updatecheckperiod'><?php echo $clang->eT("Automatically check for updates:"); ?></label>
                     <select name='updatecheckperiod' id='updatecheckperiod'>
                         <option value='0'
                             <?php if ($thisupdatecheckperiod==0) { echo "selected='selected'";} ?>
@@ -74,13 +78,41 @@
                         <option value='30'
                             <?php if ($thisupdatecheckperiod==30) { echo "selected='selected'";} ?>
                             ><?php echo $clang->eT("Every month"); ?></option>
-                    </select>&nbsp;<input type='button' onclick="window.location='<?php echo $this->createUrl("admin/globalsettings/sa/updatecheck"); ?>'" value='<?php $clang->eT("Check now"); ?>' />&nbsp;<span id='lastupdatecheck'><?php echo sprintf($clang->gT("Last check: %s"),$updatelastcheck); ?></span></li></ul><p>
+                    </select>&nbsp;<input type='button' onclick="window.open('<?php echo $this->createUrl("admin/globalsettings/sa/updatecheck"); ?>', '_top')" value='<?php $clang->eT("Check now"); ?>' />&nbsp;<span id='lastupdatecheck'><?php echo sprintf($clang->gT("Last check: %s"),$updatelastcheck); ?></span>
+                </li>
+                <li><label for='updatenotification'><?php echo $clang->eT("Show update notifications:"); ?></label>
+                    <select name='updatenotification' id='updatenotification'>
+                        <option value='never'
+                            <?php if ($sUpdateNotification=='never') { echo "selected='selected'";} ?>
+                            ><?php echo $clang->eT("Never"); ?></option>
+                        <option value='stable'
+                            <?php if ($sUpdateNotification=='stable') { echo "selected='selected'";} ?>
+                            ><?php echo $clang->eT("For stable versions"); ?></option>
+                        <option value='both'
+                            <?php if ($sUpdateNotification=='both') { echo "selected='selected'";} ?>
+                            ><?php echo $clang->eT("For stable and unstable versions"); ?></option>
+                    </select></li>
 
                 <?php
-                    if (isset($updateavailable) && $updateavailable==1)
+                    if (isset($updateavailable) && $updateavailable==1 && is_array($aUpdateVersions))
                     { ?>
-                    <span style="font-weight: bold;"><?php echo sprintf($clang->gT('There is a LimeSurvey update available: Version %s'),$updateversion."($updatebuild)"); ?></span><br />
-                    <?php echo sprintf($clang->gT('You can update %smanually%s or use the %s'),"<a href='http://docs.limesurvey.org/tiki-index.php?page=Upgrading+from+a+previous+version'>","</a>","<a href='".$this->createUrl('admin/update')."'>".$clang->gT('3-Click ComfortUpdate').'</a>'); ?><br />
+                    <li><label><span style="font-weight: bold;"><?php echo $clang->gT('The following LimeSurvey updates are available:');?></span></label><table>
+                        <?php 
+                        foreach ($aUpdateVersions as $aUpdateVersion)
+                        {?>
+                           <tr><td>
+                            <?php echo $aUpdateVersion['versionnumber'];?> (<?php echo $aUpdateVersion['build'];?>) <?php if ($aUpdateVersion['branch']!='master') $clang->eT('(unstable)'); else $clang->eT('(stable)');?>
+                           </td>
+                           <td>
+                                <input type='button' onclick="window.open('<?php echo $this->createUrl("admin/update/sa/index",array('build'=>$aUpdateVersion['build'])); ?>', '_top')" value='<?php $clang->eT("Use ComfortUpdate"); ?>' />
+                                <?php if ($aUpdateVersion['branch']!='master') {?> <input type='button' onclick="window.open('http://www.limesurvey.org/en/unstable-release/viewcategory/26-unstable-releases', '_blank')" value='<?php $clang->eT("Download"); ?>' /> <?php } 
+                                else {?> <input type='button' onclick="window.open('http://www.limesurvey.org/en/stable-release', '_blank')" value='<?php $clang->eT("Download"); ?>' /> <?php }?>
+                           </td></tr>
+                        <?php    
+                        };?>
+                        </table>
+                    </ul>
+                    <p><?php echo sprintf($clang->gT('You can %s download and update manually %s or use the %s.'),"<a href='http://manual.limesurvey.org/wiki/Upgrading_from_a_previous_version'>","</a>","<a href='http://manual.limesurvey.org/wiki/ComfortUpdate'>".$clang->gT('3-Click ComfortUpdate').'</a>'); ?></p>
                     <?php }
                     elseif (isset($updateinfo['errorcode']))
                     { echo sprintf($clang->gT('There was an error on update check (%s)'),$updateinfo['errorcode']); ?><br />
@@ -97,6 +129,7 @@
                     }
 
                 ?>
+            </ul>
             </p></div>
 
         <div id='general'>
@@ -178,10 +211,10 @@
                 <?php $dateformatdata=getDateFormatData(Yii::app()->session['dateformat']); ?>
                 <li><label for='timeadjust'><?php $clang->eT("Time difference (in hours):"); ?></label>
                     <span><input type='text' size='10' id='timeadjust' name='timeadjust' value="<?php echo htmlspecialchars(str_replace(array('+',' hours',' minutes'),array('','',''),getGlobalSetting('timeadjust'))/60); ?>" />
-                        <?php echo $clang->gT("Server time:").' '.convertDateTimeFormat(date('Y-m-d H:i:s'),'Y-m-d H:i:s',$dateformatdata['phpdate'].' H:i')." - ". $clang->gT("Corrected time :").' '.convertDateTimeFormat(dateShift(date("Y-m-d H:i:s"), 'Y-m-d H:i:s', getGlobalSetting('timeadjust')),'Y-m-d H:i:s',$dateformatdata['phpdate'].' H:i'); ?>
+                        <?php echo $clang->gT("Server time:").' '.convertDateTimeFormat(date('Y-m-d H:i:s'),'Y-m-d H:i:s',$dateformatdata['phpdate'].' H:i')." - ". $clang->gT("Corrected time:").' '.convertDateTimeFormat(dateShift(date("Y-m-d H:i:s"), 'Y-m-d H:i:s', getGlobalSetting('timeadjust')),'Y-m-d H:i:s',$dateformatdata['phpdate'].' H:i'); ?>
                     </span></li>
 
-                <li><label for='iSessionExpirationTime'><?php $clang->eT("Session lifetime (seconds):"); ?></label>
+                <li <?php if( ! isset(Yii::app()->session->connectionID)) echo 'style="display: none"';?>><label for='iSessionExpirationTime'><?php $clang->eT("Session lifetime for surveys (seconds):"); ?></label>
                     <input type='text' size='10' id='iSessionExpirationTime' name='iSessionExpirationTime' value="<?php echo htmlspecialchars(getGlobalSetting('iSessionExpirationTime')); ?>" /></li>
                 <li><label for='ipInfoDbAPIKey'><?php $clang->eT("IP Info DB API Key:"); ?></label>
                     <input type='text' size='35' id='ipInfoDbAPIKey' name='ipInfoDbAPIKey' value="<?php echo htmlspecialchars(getGlobalSetting('ipInfoDbAPIKey')); ?>" /></li>
@@ -326,10 +359,8 @@
 
                 <?php $thisforce_ssl = getGlobalSetting('force_ssl');
                     $opt_force_ssl_on = $opt_force_ssl_off = $opt_force_ssl_neither = '';
-                    $warning_force_ssl = $clang->gT('Warning: Before turning on HTTPS, ')
-                    . '<a href="https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'" title="'
-                    . $clang->gT('Test if your server has SSL enabled by clicking on this link.').'">'
-                    . $clang->gT('check if this link works.').'</a><br/> '
+                    $warning_force_ssl = sprintf($clang->gT('Warning: Before turning on HTTPS,%s check if this link works.%s'),'<a href="https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'" title="'. $clang->gT('Test if your server has SSL enabled by clicking on this link.').'">','</a>')
+                    .'<br/> '
                     . $clang->gT("If the link does not work and you turn on HTTPS, LimeSurvey will break and you won't be able to access it.");
                     switch($thisforce_ssl)
                     {
@@ -486,6 +517,17 @@
                             ><?php $clang->eT("XML-RPC"); ?></option>
                     </select></li>
                     <li><label><?php $clang->eT("URL:"); ?></label><?php echo $this->createAbsoluteUrl("admin/remotecontrol"); ?></li>
+                    <?php $rpc_publish_api=getGlobalSetting('rpc_publish_api'); ?>
+                    <li><label for='rpc_publish_api'><?php $clang->eT("Publish API on /admin/remotecontrol:"); ?></label>
+                        <select id='rpc_publish_api' name='rpc_publish_api'>
+                            <option value='1'
+                                <?php if ($rpc_publish_api == true) { echo " selected='selected'";}?>
+                                ><?php $clang->eT("Yes"); ?></option>
+                            <option value='0'
+                                <?php if ($rpc_publish_api == false) { echo " selected='selected'";}?>
+                                ><?php $clang->eT("No"); ?></option>
+                        </select>
+                    </li>
             </ul>
         </div>
         <input type='hidden' name='restrictToLanguages' id='restrictToLanguages' value='<?php implode(' ',$restrictToLanguages); ?>'/>

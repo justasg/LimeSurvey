@@ -11,8 +11,7 @@
     * other free or open source software licenses.
     * See COPYRIGHT.php for copyright notices and details.
     *
-    *	$Id$
-    */
+       */
 
 
     /*
@@ -98,6 +97,13 @@
         $supportedLanguages['ar']['dateformat'] = 2;
         $supportedLanguages['ar']['radixpoint'] = 0;
 
+        // Armenian
+        $supportedLanguages['hy']['description'] = $clang->gT('Armenian');
+        $supportedLanguages['hy']['nativedescription'] = '&#1392;&#1377;&#1397;&#1381;&#1408;&#1381;&#1398;';
+        $supportedLanguages['hy']['rtl'] = false;
+        $supportedLanguages['hy']['dateformat'] = 1;
+        $supportedLanguages['hy']['radixpoint'] = 1;
+
         // Basque
         $supportedLanguages['eu']['description'] = $clang->gT('Basque');
         $supportedLanguages['eu']['nativedescription'] = 'Euskara';
@@ -125,6 +131,13 @@
         $supportedLanguages['bg']['rtl'] = false;
         $supportedLanguages['bg']['dateformat'] = 1;
         $supportedLanguages['bg']['radixpoint'] = 0;
+
+        // Catalan
+        $supportedLanguages['ca-valencia']['description'] = $clang->gT('Catalan (Valencian)');
+        $supportedLanguages['ca-valencia']['nativedescription'] = 'Catal&#224; (Valenci&#224;)';
+        $supportedLanguages['ca-valencia']['rtl'] = false;
+        $supportedLanguages['ca-valencia']['dateformat'] = 1;
+        $supportedLanguages['ca-valencia']['radixpoint'] = 1;
 
         // Catalan
         $supportedLanguages['ca']['description'] = $clang->gT('Catalan');
@@ -190,6 +203,13 @@
         $supportedLanguages['da']['dateformat'] =  2;
         $supportedLanguages['da']['radixpoint'] = 1;
 
+        // Dari
+        $supportedLanguages['prs']['description'] = $clang->gT('Dari');
+        $supportedLanguages['prs']['nativedescription'] = '&#1583;&#1585;&#1740;';
+        $supportedLanguages['prs']['rtl'] = true;
+        $supportedLanguages['prs']['dateformat'] = 6;
+        $supportedLanguages['prs']['radixpoint'] = 0;
+
         // Dutch
         $supportedLanguages['nl']['description'] = $clang->gT('Dutch');
         $supportedLanguages['nl']['nativedescription'] = 'Nederlands';
@@ -232,12 +252,26 @@
         $supportedLanguages['fr']['dateformat'] = 5;
         $supportedLanguages['fr']['radixpoint'] = 1;
 
+        // Fula
+        $supportedLanguages['ful']['description'] = $clang->gT('Fula');
+        $supportedLanguages['ful']['nativedescription'] = 'Fulfulde';
+        $supportedLanguages['ful']['rtl'] = false;
+        $supportedLanguages['ful']['dateformat'] = 5;
+        $supportedLanguages['ful']['radixpoint'] = 1;
+
         // Galician
         $supportedLanguages['gl']['description'] = $clang->gT('Galician');
         $supportedLanguages['gl']['nativedescription'] = 'Galego';
         $supportedLanguages['gl']['rtl'] = false;
         $supportedLanguages['gl']['dateformat'] = 5;
         $supportedLanguages['gl']['radixpoint'] = 1;
+
+        // Georgian
+        $supportedLanguages['ka']['description'] = $clang->gT('Georgian');
+        $supportedLanguages['ka']['nativedescription'] = '&#4325;&#4304;&#4320;&#4311;&#4323;&#4314;&#4312; &#4308;&#4316;&#4304;';
+        $supportedLanguages['ka']['rtl'] = false;
+        $supportedLanguages['ka']['dateformat'] = 1;
+        $supportedLanguages['ka']['radixpoint'] = 1;
 
         // German
         $supportedLanguages['de']['description'] = $clang->gT('German');
@@ -252,6 +286,13 @@
         $supportedLanguages['de-informal']['rtl'] = false;
         $supportedLanguages['de-informal']['dateformat'] = 1;
         $supportedLanguages['de-informal']['radixpoint'] = 1;
+        
+        // Gujarati
+        $supportedLanguages['gu']['description'] = $clang->gT('Gujarati');
+        $supportedLanguages['gu']['nativedescription'] = '&#2711;&#2753;&#2716;&#2736;&#2750;&#2724;&#2752;';
+        $supportedLanguages['gu']['rtl'] = false;
+        $supportedLanguages['gu']['dateformat'] = 2;
+        $supportedLanguages['gu']['radixpoint'] = 0;
 
         // Greek
         $supportedLanguages['el']['description'] = $clang->gT('Greek');
@@ -323,6 +364,13 @@
         $supportedLanguages['ja']['dateformat'] = 6;
         $supportedLanguages['ja']['radixpoint'] = 0;
 
+        // Kinyarwanda 
+        $supportedLanguages['rw']['description'] = $clang->gT('Kinyarwanda');
+        $supportedLanguages['rw']['nativedescription'] = 'Kinyarwanda';
+        $supportedLanguages['rw']['rtl'] = false;
+        $supportedLanguages['rw']['dateformat'] = 5;
+        $supportedLanguages['rw']['radixpoint'] = 1;
+
         // Korean
         $supportedLanguages['ko']['description'] = $clang->gT('Korean');
         $supportedLanguages['ko']['nativedescription'] = '&#54620;&#44397;&#50612;';
@@ -380,6 +428,13 @@
         $supportedLanguages['mt']['dateformat'] = 1;
         $supportedLanguages['mt']['radixpoint'] = 0;
 
+        // Marathi
+        $supportedLanguages['mr']['description'] = $clang->gT('Marathi');
+        $supportedLanguages['mr']['nativedescription'] = '&#2350;&#2352;&#2366;&#2336;&#2368;';
+        $supportedLanguages['mr']['rtl'] = false;
+        $supportedLanguages['mr']['dateformat'] = 2;
+        $supportedLanguages['mr']['radixpoint'] = 0;
+        
         // Norwegian Bokmal
         $supportedLanguages['nb']['description'] = $clang->gT('Norwegian (Bokmal)');
         $supportedLanguages['nb']['nativedescription'] = 'Norsk Bokm&#229;l';
@@ -393,6 +448,20 @@
         $supportedLanguages['nn']['rtl'] = false;
         $supportedLanguages['nn']['dateformat'] = 4;
         $supportedLanguages['nn']['radixpoint'] = 1;
+
+        // Occitan
+        $supportedLanguages['oc']['description'] = $clang->gT('Occitan');
+        $supportedLanguages['oc']['nativedescription'] = 'Lenga d&#39;&#242;c';
+        $supportedLanguages['oc']['rtl'] = false;
+        $supportedLanguages['oc']['dateformat'] = 5;
+        $supportedLanguages['oc']['radixpoint'] = 1;
+
+        // Pashto
+        $supportedLanguages['ps']['description'] = $clang->gT('Pashto');
+        $supportedLanguages['ps']['nativedescription'] = '&#1662;&#1690;&#1578;&#1608;';
+        $supportedLanguages['ps']['rtl'] = true;
+        $supportedLanguages['ps']['dateformat'] = 6;
+        $supportedLanguages['ps']['radixpoint'] = 0;
 
         // Persian
         $supportedLanguages['fa']['description'] = $clang->gT('Persian');
@@ -484,6 +553,20 @@
         $supportedLanguages['es']['rtl'] = false;
         $supportedLanguages['es']['dateformat'] = 5;
         $supportedLanguages['es']['radixpoint'] = 1;
+        
+        // Spanish (Argentina)
+        $supportedLanguages['es-AR']['description'] = $clang->gT('Spanish (Argentina)');
+        $supportedLanguages['es-AR']['nativedescription'] = 'Espa&#241;ol rioplatense';
+        $supportedLanguages['es-AR']['rtl'] = false;
+        $supportedLanguages['es-AR']['dateformat'] = 5;
+        $supportedLanguages['es-AR']['radixpoint'] = 0;
+
+        // Spanish (Argentina) (Informal)
+        $supportedLanguages['es-AR-informal']['description'] = $clang->gT('Spanish (Argentina) (Informal)');
+        $supportedLanguages['es-AR-informal']['nativedescription'] = 'Espa&#241;ol rioplatense informal';
+        $supportedLanguages['es-AR-informal']['rtl'] = false;
+        $supportedLanguages['es-AR-informal']['dateformat'] = 5;
+        $supportedLanguages['es-AR-informal']['radixpoint'] = 0;
 
         // Spanish (Chile)
         $supportedLanguages['es-CL']['description'] = $clang->gT('Spanish (Chile)');
@@ -512,6 +595,13 @@
         $supportedLanguages['sv']['rtl'] = false;
         $supportedLanguages['sv']['dateformat'] = 6;
         $supportedLanguages['sv']['radixpoint'] = 1;
+
+        // Tamil
+        $supportedLanguages['ta']['description'] = $clang->gT('Tamil');
+        $supportedLanguages['ta']['nativedescription'] = '&#2980;&#2990;&#3007;&#2996;&#3021;';
+        $supportedLanguages['ta']['rtl'] = false;
+        $supportedLanguages['ta']['dateformat'] = 2;
+        $supportedLanguages['ta']['radixpoint'] = 0;
 
         // Turkish
         $supportedLanguages['tr']['description'] = $clang->gT('Turkish');
@@ -542,6 +632,13 @@
         $supportedLanguages['vi']['dateformat'] = 5;
         $supportedLanguages['vi']['radixpoint'] = 1;
 
+        // Zulu
+        $supportedLanguages['zu']['description'] = $clang->gT('Zulu');
+        $supportedLanguages['zu']['nativedescription'] = 'isiZulu';
+        $supportedLanguages['zu']['rtl'] = false;
+        $supportedLanguages['zu']['dateformat'] = 5;
+        $supportedLanguages['zu']['radixpoint'] = 1;
+
         if ($bOrderByNative)
         {
             uasort($supportedLanguages,"userSortNative");
@@ -558,7 +655,7 @@
 
 
     /**
-    *  Returns avaliable formats for Radix Points (Decimal Seperators) or returns
+    *  Returns avaliable formats for Radix Points (Decimal Separators) or returns
     *  radix point info about a specific format.
     *
     *  @param int $format Format ID/Number [optional]
@@ -567,8 +664,8 @@
     {
         $clang = Yii::app()->lang;
         $aRadixFormats = array (
-        0=>array('seperator'=> '.', 'desc'=> $clang->gT('Dot (.)')),
-        1=>array('seperator'=> ',', 'desc'=> $clang->gT('Comma (,)'))
+        0=>array('separator'=> '.', 'desc'=> $clang->gT('Dot (.)')),
+        1=>array('separator'=> ',', 'desc'=> $clang->gT('Comma (,)'))
         );
 
         // hack for fact that null sometimes sent to this function
@@ -650,7 +747,7 @@
     function getJSDateFromDateFormat($sDateformat)
     {
         // The only difference from dateformat is that Jsdate does not support truncated years
-        return str_replace(array('yyyy','MM','M'), array('yy','NN','NN'), $sDateformat);
+        return str_replace(array('yy', 'MM','M'), array('y','NN','NN'), $sDateformat);
     }
 
 
@@ -697,7 +794,7 @@
         {
             $languagecode=Survey::model()->findByPk($surveyid)->language;
         }
-        $data = Surveys_languagesettings::model()->getDateFormat($surveyid,$languagecode);
+        $data = SurveyLanguageSetting::model()->getDateFormat($surveyid,$languagecode);
 
         if(empty($data))
         {

@@ -21,6 +21,7 @@
 */
 class update extends Survey_Common_Action
 {
+
     /**
     * Default Controller Action
     */
@@ -33,36 +34,42 @@ class update extends Survey_Common_Action
         $clang = $this->getController()->lang;
         $iCurrentBuildnumber = Yii::app()->getConfig("buildnumber");
         $tempdir = Yii::app()->getConfig("tempdir");
-        $iDestinationBuild= getGlobalSetting("updatebuild");
+        $iDestinationBuild = Yii::app()->request->getParam('build',getGlobalSetting("updatebuild"));
 
-        $updatekey = $this->_getUpdateKey($sSubAction);
+        $aUpdateVersions = json_decode(getGlobalSetting("updateversions"),true);
+        foreach($aUpdateVersions as $sBranch=>$aUpdateVersion)
+        {
+            if ($aUpdateVersion['build']==$iDestinationBuild)
+            {
+                setGlobalSetting('updatebuild',$aUpdateVersion['build']);
+                setGlobalSetting('updateversion',$aUpdateVersion['versionnumber']);
+            }
+        }
+        
         $error = false;
 
-        if ( $updatekey != '' ) {
-            if (!is_writable($tempdir)) {
-                $error = true;
-            }
-            if (!is_writable(APPPATH . 'config/version.php')) {
-                $error = true;
-            }
-
-            list($httperror, $changelog, $cookies) = $this->_getChangelog($iCurrentBuildnumber, $iDestinationBuild, $updatekey);
+        if (!is_writable($tempdir)) {
+            $error = true;
         }
+        if (!is_writable(APPPATH . 'config/version.php')) {
+            $error = true;
+        }
+
+        list($httperror, $changelog, $cookies) = $this->_getChangelog($iCurrentBuildnumber, $iDestinationBuild);
 
         $aData['error'] = $error;
         $aData['tempdir'] = $tempdir;
-        $aData['updatekey'] = $updatekey;
         $aData['changelog'] = isset($changelog) ? $changelog : '';
         $aData['httperror'] = isset($httperror) ? $httperror : '';
 
         $this->_renderWrappedTemplate('update', 'update', $aData);
     }
 
-    private function _getChangedFiles($buildnumber, $updaterversion, $updatekey)
+    private function _getChangedFiles($buildnumber, $updaterversion)
     {
         Yii::import('application.libraries.admin.http.httpRequestIt');
         $http = new httpRequestIt;
-        $httperror = $this->_requestChangedFiles($http, $buildnumber, $updaterversion, $updatekey);
+        $httperror = $this->_requestChangedFiles($http, $buildnumber, $updaterversion);
 
         if ($httperror != '') {
             return array($httperror, null);
@@ -70,11 +77,11 @@ class update extends Survey_Common_Action
         return $this->_readChangelog($http);
     }
     
-    private function _getChangelog($buildnumber, $updaterversion, $updatekey)
+    private function _getChangelog($buildnumber, $updaterversion)
     {
         Yii::import('application.libraries.admin.http.httpRequestIt');
         $http = new httpRequestIt;
-        $httperror = $this->_requestChangelog($http, $buildnumber, $updaterversion, $updatekey);
+        $httperror = $this->_requestChangelog($http, $buildnumber, $updaterversion);
 
         if ($httperror != '') {
             return array($httperror, null);
@@ -97,53 +104,38 @@ class update extends Survey_Common_Action
         }
     }
 
-    private function _requestChangelog(httpRequestIt $http, $buildnumber, $updaterversion, $updatekey)
+    private function _requestChangelog(httpRequestIt $http, $buildnumber, $updaterversion)
     {
         $http->timeout = 0;
         $http->data_timeout = 0;
         $http->user_agent = 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)';
-        $http->GetRequestArguments('http://update.limesurvey.org/updates/changelog/' . $buildnumber . '/' . $updaterversion . '/' . $updatekey, $arguments);
+        $http->GetRequestArguments('https://update.limesurvey.org/updates/changelog/' . $buildnumber . '/' . $updaterversion , $arguments);
 
         $http->Open($arguments);
 
         return $http->SendRequest($arguments);
     }
     
-    private function _requestChangedFiles(httpRequestIt $http, $buildnumber, $updaterversion, $updatekey)
+    private function _requestChangedFiles(httpRequestIt $http, $buildnumber, $updaterversion)
     {
         $http->timeout = 0;
         $http->data_timeout = 0;
         $http->user_agent = 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)';
-        $http->GetRequestArguments('http://update.limesurvey.org/updates/update/' . $buildnumber . '/' . $updaterversion . '/' . $updatekey, $arguments);
+        $http->GetRequestArguments('https://update.limesurvey.org/updates/update/' . $buildnumber . '/' . $updaterversion , $arguments);
 
         $http->Open($arguments);
 
         return $http->SendRequest($arguments);
     }
     
-
-    private function _getUpdateKey($sSubAction)
-    {
-        $updatekey = getGlobalSetting("updatekey");
-        if ($sSubAction == 'keyupdate') {
-            $updatekey = sanitize_paranoid_string($_POST['updatekey']);
-            setGlobalSetting('updatekey', $updatekey);
-            Yii::app()->setConfig("updatekey", $updatekey);
-            return $updatekey;
-        }
-        return $updatekey;
-    }
-
-
     function step2()
     {
         
         $clang = $this->getController()->lang;
         $buildnumber = Yii::app()->getConfig("buildnumber");
         $updatebuild = getGlobalSetting("updatebuild");
-        $updatekey =getGlobalSetting("updatekey");
 
-        list($error, $updateinfo, $cookies) = $this->_getChangedFiles($buildnumber, $updatebuild, $updatekey);
+        list($error, $updateinfo, $cookies) = $this->_getChangedFiles($buildnumber, $updatebuild);
         $aData = $this->_getFileStatus($updateinfo);
         $aReadOnlyFiles=array_unique($aData['readonlyfiles']);
         sort($aReadOnlyFiles);
@@ -224,7 +216,6 @@ class update extends Survey_Common_Action
         $clang = $this->getController()->lang;
         $buildnumber = Yii::app()->getConfig("buildnumber");
         $tempdir = Yii::app()->getConfig("tempdir");
-        $updatekey = getGlobalSetting("updatekey");
         $updatebuild = getGlobalSetting("updatebuild");
         //$_POST=$this->input->post();
         $rootdir = Yii::app()->getConfig("rootdir");
@@ -238,7 +229,6 @@ class update extends Survey_Common_Action
         {
             if ($updateinfo['error']==1)
             {
-                setGlobalSetting('updatekey','');
             }
         }
         else
@@ -270,9 +260,12 @@ class update extends Survey_Common_Action
         $v_list = $archive->add($filestozip, PCLZIP_OPT_REMOVE_PATH, $publicdir);
 
         if ($v_list == 0) {
-            die("Error : ".$archive->errorInfo(true));
+            $aFileBackup= array('class'=>'error','text'=>sprintf($clang->gT("Error on file backup: %s"),$archive->errorInfo(true)));
         }
-        $aData['sFilesArchive']=$tempdir.DIRECTORY_SEPARATOR.'LimeSurvey_files_backup_'.$basefilename.'.zip';
+        else{
+            $aFileBackup= array('class'=>'success','text'=>sprintf($clang->gT("File backup created: %s"),$tempdir.DIRECTORY_SEPARATOR.'LimeSurvey_files_backup_'.$basefilename.'.zip'));
+        }
+        $aData['aFileBackup']=$aFileBackup;
 
         $aData['databasetype'] = $aDatabasetype;
 
@@ -285,17 +278,38 @@ class update extends Survey_Common_Action
                 $dfilename = $tempdir.DIRECTORY_SEPARATOR."LimeSurvey_database_backup_".$basefilename.".sql.gz";
 
                 outputDatabase('',false,$sfilename);
-
-                $archive = new PclZip($dfilename);
-                $v_list = $archive->add(array($sfilename), PCLZIP_OPT_REMOVE_PATH, $tempdir);
-                unlink($sfilename);
-                if ($v_list == 0) {
-                    die("Error : ".$archive->errorInfo(true));
+                // Before try to zip: test size of file
+                if( is_file($sfilename) && filesize($sfilename))
+                {
+                    $archive = new PclZip($dfilename);
+                    $v_list = $archive->add(array($sfilename), PCLZIP_OPT_REMOVE_PATH, $tempdir,PCLZIP_OPT_ADD_TEMP_FILE_ON);
+                    unlink($sfilename);
+                    if ($v_list == 0) {// Unknow reason because backup of DB work ?
+                        $aSQLBackup=array('class'=>'warning','text'=>$clang->gT("Unable to backup your database for unknow reason. Before proceeding please backup your database using a backup tool!"));
+                    }
+                    else
+                    {
+                        $aSQLBackup=array('class'=>'success','text'=>sprintf($clang->gT('DB backup created: %s'),htmlspecialchars($dfilename)));
+                    }
                 }
-                $aData['sSQLArchive']=$dfilename;
+                else
+                {
+                    $aSQLBackup=array('class'=>'warning','text'=>$clang->gT("Unable to backup your database for unknow reason. Before proceeding please backup your database using a backup tool!"));
+                }
             }
         }
-
+        else
+        {
+            $aSQLBackup=array('class'=>'warning','text'=>$clang->gT('Database backup functionality is currently not available for your database type. Before proceeding please backup your database using a backup tool!'));
+        }
+        $aData['aSQLBackup']=$aSQLBackup;
+        if($aFileBackup['class']=="success" && $aSQLBackup['class']=="success") {
+            $aData['result']="success";
+        }elseif($aFileBackup['class']=="error" || $aSQLBackup['class']=="error") {
+            $aData['result']="error";
+        }else{
+            $aData['result']="warning";
+        }
         $this->_renderWrappedTemplate('update', 'step3', $aData);
     }
 
@@ -305,7 +319,6 @@ class update extends Survey_Common_Action
         $clang = $this->getController()->lang;
         $buildnumber = Yii::app()->getConfig("buildnumber");
         $tempdir = Yii::app()->getConfig("tempdir");
-        $updatekey = getGlobalSetting("updatekey");
         $updatebuild = getGlobalSetting("updatebuild");
 
         $rootdir = Yii::app()->getConfig("rootdir");
@@ -319,7 +332,6 @@ class update extends Survey_Common_Action
         {
             if ($updateinfo['error']==1)
             {
-                setGlobalSetting('updatekey','');
             }
         }
         else
@@ -340,7 +352,7 @@ class update extends Survey_Common_Action
         /* Data transfer timeout */
         $http->data_timeout=0;
         $http->user_agent="Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)";
-        $http->GetRequestArguments("http://update.limesurvey.org/updates/download/{$updateinfo['downloadid']}",$arguments);
+        $http->GetRequestArguments("https://update.limesurvey.org/updates/download/{$updateinfo['downloadid']}",$arguments);
         $http->RestoreCookies(Yii::app()->session['updatesession']);
 
         $error=$http->Open($arguments);
@@ -422,12 +434,10 @@ class update extends Survey_Common_Action
         }
         setGlobalSetting('updateavailable','0');
         setGlobalSetting('updatebuild','');
-        setGlobalSetting('updateversion','');
+        setGlobalSetting('updateversions','');
         // We create this new language object here because the language files might have been overwritten earlier
         // and the pointers to the file from the application language are not valid anymore 
-        $aLanguage = new Limesurvey_lang(Yii::app()->session['adminlang']);
-        $aData['clang'] = $aLanguage;
-
+        Yii::app()->lang = $aData['clang'] = new Limesurvey_lang(Yii::app()->session['adminlang'],true);
         $this->_renderWrappedTemplate('update', 'step4', $aData);
     }
 
@@ -446,7 +456,7 @@ class update extends Survey_Common_Action
         /* Data transfer timeout */
         $oHTTPRequest->data_timeout=0;
         $oHTTPRequest->user_agent="Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)";
-        $oHTTPRequest->GetRequestArguments("http://update.limesurvey.org?updaterbuild={$buildnumber}",$arguments);
+        $oHTTPRequest->GetRequestArguments("https://update.limesurvey.org?updaterbuild={$buildnumber}",$arguments);
 
         $updateinfo=false;
         $error=$oHTTPRequest->Open($arguments);
@@ -500,7 +510,7 @@ class update extends Survey_Common_Action
         /* Data transfer timeout */
         $oHTTPRequest->data_timeout=0;
         $oHTTPRequest->user_agent="Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)";
-        $oHTTPRequest->GetRequestArguments("http://update.limesurvey.org/updates/downloadupdater/{$this->updaterversion}",$arguments);
+        $oHTTPRequest->GetRequestArguments("https://update.limesurvey.org/updates/downloadupdater/{$buildnumber}",$arguments);
 
         $oHTTPRequesterror=$oHTTPRequest->Open($arguments);
         $oHTTPRequesterror=$oHTTPRequest->SendRequest($arguments);
